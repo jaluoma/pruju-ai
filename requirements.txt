@@ -1,0 +1,8 @@
+python-dotenv
+gradio
+langchain
+tiktoken
+faiss-cpu
+torch
+sentence-transformers
+InstructorEmbedding
