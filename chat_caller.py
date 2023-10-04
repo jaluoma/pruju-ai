@@ -1,12 +1,9 @@
 import os
-#from customllm_langchain.custom_azure import MyChat # Import custom wrapper
 from langchain.schema import AIMessage, SystemMessage, HumanMessage
 from langchain.embeddings import HuggingFaceInstructEmbeddings
 from langchain.vectorstores import FAISS
 from langchain.chat_models import AzureChatOpenAI
 import tiktoken
-
-#chat = MyChat() # Initialize chat model
 
 # openai.api_base = "http://127.0.0.1:7080"
 # openai.api_key = os.getenv("AZURE_OPENAI_KEY")
