@@ -2,8 +2,6 @@
 
 Course-gpt is a course assistant app based on retrieval-augmented generation and large language models. It uses `gradio` to render the front end `langchain` to retrieve documents and communicate with the large language model. By default it uses Azure/OpenAI, but you should be able to change this to any chat model supported by langchain.
 
-With the current setup it is available locally.
-
 # Getting started
 
 Clone the repo, create a virtual environment, and install required dependencies.
