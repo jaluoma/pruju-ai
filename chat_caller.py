@@ -4,6 +4,7 @@ from langchain.embeddings import HuggingFaceInstructEmbeddings
 from langchain.vectorstores import FAISS
 from langchain.chat_models import AzureChatOpenAI
 import tiktoken
+from langchain.callbacks import get_openai_callback
 
 # openai.api_base = "http://127.0.0.1:7080"
 # openai.api_key = os.getenv("AZURE_OPENAI_KEY")
@@ -81,7 +82,10 @@ def query_gpt_chat(query: str, history, max_tokens: int):
     #print(str(messages))
 
     # Query chat model
-    results = chat(messages)
+    with get_openai_callback() as cb:
+        results = chat(messages)
+    print(cb)
+    
     results_content = results.content
 
     return results_content
