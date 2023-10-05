@@ -7,7 +7,7 @@ import os
 
 def courseGPT(query, chat_history):
     max_tokens = 2000
-    # # unpack history
+    # unpack history
     chat_history_unpacked = []
     for x in chat_history:
         for y in x:
