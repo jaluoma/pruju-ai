@@ -6,3 +6,4 @@ faiss-cpu
 torch
 sentence-transformers
 InstructorEmbedding
+openai
