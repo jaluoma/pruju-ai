@@ -14,8 +14,8 @@ default_model = "gpt-4"
 fallback_model = "gpt-35-turbo"
 
 # Control parameters:
-max_default_calls_per_day = 3
-max_total_calls_per_day = 5
+max_default_calls_per_day = int(os.getenv("DEFAULT_MODEL_QUOTA"))
+max_total_calls_per_day = int(os.getenv("TOTAL_MODEL_QUOTA"))
 
 # Log-file definition
 logger.remove()
