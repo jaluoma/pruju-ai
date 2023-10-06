@@ -57,7 +57,7 @@ def token_counter(messages):
 # Book-keeping for quota monitoring 
 
 def get_daily_calls(log_file):
-    # Loop through lines in file and return the number after ;
+    # Loop through lines in file and return the number after ; on the last line
     # This is the cumulative number of calls so far
     with open(log_file, 'r') as file:
         last_line = None
