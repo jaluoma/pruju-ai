@@ -38,7 +38,7 @@ def purge_memory(messages, max_tokens: int):
     if (len(messages)>1):
         while (token_count>max_tokens):
             # Print purged message for testing purposes
-            # print("Purged the following message:\n" + messages[1].content)
+            #print("Purged the following message:\n" + messages[1].content)
             messages.pop(1)
             token_count = token_counter(messages)
     return
@@ -99,7 +99,7 @@ print("System instruction template:\n" + system_instruction_template)
 # Main chat caller function
 
 def query_gpt_chat(query: str, history, max_tokens: int):
-
+    max_tokens=1000
     # Check quota status and update model accordingly
     daily_calls_sum = check_quota_status()
     current_model = choose_model(daily_calls_sum)
@@ -131,10 +131,14 @@ def query_gpt_chat(query: str, history, max_tokens: int):
     messages.append(HumanMessage(content=query))
 
     # Purge memory to save tokens
+    # Current implementation is not ideal.
+    # Gradio keeps the entire history in memory 
+    # Therefore, the messages memory is re-purged on every call once token count max_tokens 
     #print("Message purge")
-    #print("tokens: " + str(token_counter(messages)))
+    #print("tokens before purge: " + str(token_counter(messages)))
     purge_memory(messages,max_tokens)
-    #print("tokens: " + str(token_counter(messages)))
+    #print("tokens after purge: " + str(token_counter(messages)))
+    #print("First message: \n" + str(messages[1].type))
 
     #print(str(messages))
 
