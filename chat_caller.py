@@ -45,7 +45,7 @@ def purge_memory(messages, max_tokens: int):
 
 def token_counter(messages):
     current_model = chat.deployment_name
-    print("Counting tokens based on: " + current_model)
+    # print("Counting tokens based on: " + current_model)
     if current_model == default_model:
         encoding = tiktoken.encoding_for_model("gpt-4")
     else:
@@ -57,7 +57,7 @@ def token_counter(messages):
 # Book-keeping for quota monitoring 
 
 def get_daily_calls(log_file):
-    # Loop through lines in file and return the number after ; on the last line
+    # Loop through lines in file and return the number after ' ' on the last line
     # This is the cumulative number of calls so far
     with open(log_file, 'r') as file:
         last_line = None
