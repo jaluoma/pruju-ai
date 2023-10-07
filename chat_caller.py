@@ -38,7 +38,7 @@ def purge_memory(messages, max_tokens: int):
     if (len(messages)>1):
         while (token_count>max_tokens):
             # Print purged message for testing purposes
-            #print("Purged the following message:\n" + messages[1].content)
+            # print("Purged the following message:\n" + messages[1].content)
             messages.pop(1)
             token_count = token_counter(messages)
     return
@@ -64,7 +64,7 @@ def get_daily_calls(log_file):
         for line in file:
             last_line = line
         if last_line:
-            return int(last_line.strip().split(';')[-1])
+            return int(last_line.split(' ')[-1])
         else:
             return 0
         
@@ -99,7 +99,7 @@ print("System instruction template:\n" + system_instruction_template)
 # Main chat caller function
 
 def query_gpt_chat(query: str, history, max_tokens: int):
-    max_tokens=os.getenv("MAX_PROMPT_TOKENS")
+    max_tokens=int(os.getenv("MAX_PROMPT_TOKENS"))
     # Check quota status and update model accordingly
     daily_calls_sum = check_quota_status()
     current_model = choose_model(daily_calls_sum)
@@ -114,7 +114,7 @@ def query_gpt_chat(query: str, history, max_tokens: int):
     # Combine instructions + context to create system instruction for the chat model
     system_instruction = system_instruction_template + context
 
-    # Read messages from history
+    # Convert message history to list of message objects
     messages_history = []
     i = 0
     for message in history:
@@ -134,11 +134,11 @@ def query_gpt_chat(query: str, history, max_tokens: int):
     # Current implementation is not ideal.
     # Gradio keeps the entire history in memory 
     # Therefore, the messages memory is re-purged on every call once token count max_tokens 
-    #print("Message purge")
-    #print("tokens before purge: " + str(token_counter(messages)))
+    # print("Message purge")
+    # print("tokens before purge: " + str(token_counter(messages)))
     purge_memory(messages,max_tokens)
-    #print("tokens after purge: " + str(token_counter(messages)))
-    #print("First message: \n" + str(messages[1].type))
+    # print("tokens after purge: " + str(token_counter(messages)))
+    # print("First message: \n" + str(messages[1].type))
 
     #print(str(messages))
 
@@ -148,7 +148,7 @@ def query_gpt_chat(query: str, history, max_tokens: int):
     print(cb)
 
     query_statistics = [cb.prompt_tokens, cb.completion_tokens, cb.total_cost, cb.successful_requests]
-    query_statistics = ",".join(str(i) for i in query_statistics)+";" + str(daily_calls_sum+cb.successful_requests) 
+    query_statistics = ",".join(str(i) for i in query_statistics)+ " " + str(daily_calls_sum+cb.successful_requests) 
     logger.info(query_statistics)
     
     results_content = results.content
