@@ -1,4 +1,5 @@
-Is attendance compulsory in this course?
-Can you write me a Python script to train a linear regression model?
-What are large language models?
-Can you tell me what is wrong with this code: `regression=LinearRegression(y~X)`?
+Is attendance compulsory in this course? 
+When is the first lecture of the course? 
+Can you write me a Python script to train a linear regression model? 
+What are large language models? 
+Can you tell me what is wrong with this: `regression=LinearRegression(y~X)`? 

@@ -9,11 +9,11 @@ from langchain.chat_models import AzureChatOpenAI
 import tiktoken
 from langchain.callbacks import get_openai_callback
 
-# Define chat engine
+# Define chat engines
 default_model = "gpt-4"
 fallback_model = "gpt-35-turbo"
 
-# Control parameters:
+# Control parameters
 max_default_calls_per_day = int(os.getenv("DEFAULT_MODEL_QUOTA"))
 max_total_calls_per_day = int(os.getenv("TOTAL_MODEL_QUOTA"))
 
@@ -22,6 +22,7 @@ logger.remove()
 logger.add("logs/call_log_{time:YYYY-MM-DD}.log", rotation="1 day", format="{time} {message}", level="INFO")
 
 # Initialize chat model
+
 chat = AzureChatOpenAI(
     openai_api_base="http://127.0.0.1:7080",
     openai_api_version="2023-05-15",
@@ -88,9 +89,9 @@ def choose_model(daily_calls_sum):
         current_model=default_model
         chat.deployment_name = current_model
         return current_model
-
+    
 # Read knowledge base
-
+os.environ['TOKENIZERS_PARALLELISM'] = 'false' # Avoid warning: https://github.com/huggingface/transformers/issues/5486
 knowledge_base = FAISS.load_local(os.getenv("CHAT_DATA_FOLDER")+"/faiss_index", HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-xl"))
 instruction_file = open(str(os.getenv("CHAT_DATA_FOLDER"))+"/prompt_template.txt",'r')
 system_instruction_template = instruction_file.read()
