@@ -95,8 +95,7 @@ def choose_model(daily_calls_sum):
     
 # Read knowledge base
 os.environ['TOKENIZERS_PARALLELISM'] = 'false' # Avoid warning: https://github.com/huggingface/transformers/issues/5486
-knowledge_base = FAISS.load_local(os.getenv("CHAT_DATA_FOLDER")+"/faiss_index", HuggingFaceInstructEmbeddings(cache_folder=os.getenv("MODEL_CACHE"), model_name="sentence-transformers/all-MiniLM-L6-v2"))
-#knowledge_base = FAISS.load_local("course_material_vdb", HuggingFaceInstructEmbeddings(cache_folder=os.getenv("MODEL_CACHE"), model_name="sentence-transformers/all-MiniLM-L6-v2"))
+vector_store = FAISS.load_local(os.getenv("CHAT_DATA_FOLDER")+"/faiss_index", HuggingFaceInstructEmbeddings(cache_folder=os.getenv("MODEL_CACHE"), model_name="sentence-transformers/all-MiniLM-L6-v2"))
 instruction_file = open(str(os.getenv("CHAT_DATA_FOLDER"))+"/prompt_template.txt",'r')
 system_instruction_template = instruction_file.read()
 print("System instruction template:\n" + system_instruction_template)
@@ -112,8 +111,8 @@ def query_gpt_chat(query: str, history, max_tokens: int):
         current_model=default_model
         return("I've been dealing with so many requests today that I need to rest a bit. Please come back tomorrow!")
 
-    # Search knowledge base for relevant documents
-    docs = knowledge_base.similarity_search(query)
+    # Search vector store for relevant documents
+    docs = vector_store.similarity_search(query)
     context = str(docs)
 
     # Combine instructions + context to create system instruction for the chat model
