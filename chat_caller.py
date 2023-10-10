@@ -9,6 +9,9 @@ from langchain.chat_models import AzureChatOpenAI
 import tiktoken
 from langchain.callbacks import get_openai_callback
 
+from dotenv import load_dotenv 
+load_dotenv()
+
 # Define chat engines
 default_model = "gpt-4"
 fallback_model = "gpt-35-turbo"
