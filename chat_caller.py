@@ -24,7 +24,7 @@ logger.add("logs/call_log_{time:YYYY-MM-DD}.log", rotation="1 day", format="{tim
 # Initialize chat model
 
 chat = AzureChatOpenAI(
-    openai_api_base="http://127.0.0.1:7080",
+    openai_api_base=os.getenv("GATEWAY_SERVER"),
     openai_api_version="2023-05-15",
     deployment_name=default_model,
     openai_api_key=os.getenv("AZURE_OPENAI_KEY"),
@@ -92,7 +92,7 @@ def choose_model(daily_calls_sum):
     
 # Read knowledge base
 os.environ['TOKENIZERS_PARALLELISM'] = 'false' # Avoid warning: https://github.com/huggingface/transformers/issues/5486
-knowledge_base = FAISS.load_local(os.getenv("CHAT_DATA_FOLDER")+"/faiss_index", HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-xl"))
+knowledge_base = FAISS.load_local(os.getenv("CHAT_DATA_FOLDER")+"/faiss_index", HuggingFaceInstructEmbeddings(cache_folder=os.getenv("MODEL_CACHE"), model_name="hkunlp/instructor-xl"))
 instruction_file = open(str(os.getenv("CHAT_DATA_FOLDER"))+"/prompt_template.txt",'r')
 system_instruction_template = instruction_file.read()
 print("System instruction template:\n" + system_instruction_template)

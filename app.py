@@ -20,4 +20,5 @@ with open(os.getenv("CHAT_DATA_FOLDER")+'/examples_ui.txt', 'r') as file:
 demo = gr.ChatInterface(fn=courseGPT, analytics_enabled=False, examples = examples)
 
 if __name__ == "__main__":
+    print("Launching Demo")
     demo.launch()   
