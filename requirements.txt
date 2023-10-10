@@ -8,3 +8,4 @@ sentence-transformers
 InstructorEmbedding
 openai
 loguru
+textract

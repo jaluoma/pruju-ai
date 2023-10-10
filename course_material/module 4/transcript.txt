@@ -1,0 +1,51 @@
+
+# Primer on Business Analytics with Python
+## Module 4: Supervised Machine Learning for Prediction and Classification
+### Transcript for Imagined Lecture
+
+Hello everyone and welcome back to our course, "Primer on Business Analytics with Python". Today, we'll delve into Module 4, which is all about Supervised Machine Learning for Prediction and Classification.
+
+### Introduction
+So what is supervised machine learning? It's a type of machine learning where we train a model on a labeled dataset. The model learns from the features of the data and makes predictions or decisions based on new, unseen data. This is incredibly useful in business. For example, you could predict customer churn or even detect fraud.
+
+### Learning Objectives
+By the end of this module, you should be able to:
+- Understand the basics of supervised machine learning.
+- Use Python libraries to implement machine learning algorithms.
+
+### Basics of Supervised Machine Learning
+Let's start with the basics. In supervised learning, we have a dataset with features and labels. The features are the variables that the model uses to make predictions, while the labels are the outcomes we're interested in predicting. For instance, in a customer churn prediction model, features could include customer activity metrics, and the label would be whether the customer churned or not.
+
+*Show code example on screen*
+Here we have loaded a dataset called Iris, commonly used for machine learning demonstrations. We separate the data into features (`X`) and labels (`y`).
+
+### Common Algorithms
+There are various algorithms used in supervised learning. These include:
+- Linear Regression for continuous outcomes.
+- Logistic Regression for binary classification.
+
+*Show code example on screen*
+We use the logistic regression algorithm from the scikit-learn library to train a model on a subset of the Iris dataset. After training, we use the model to make predictions on a test set.
+
+### Model Evaluation - Training and Test Sets
+To evaluate the model, we usually split our dataset into training and test sets. We train the model on the training set and evaluate it on the test set to see how well it generalizes to new, unseen data.
+
+*Show code example on screen*
+Here we split the Iris dataset into a training set and a test set. The training set has 80% of the data, and the test set has the remaining 20%.
+
+### Model Evaluation - Confusion Matrix
+Another crucial aspect of model evaluation is the confusion matrix. It's a table that describes how well your classification model performed.
+
+*Show code example on screen*
+We've generated a confusion matrix for our logistic regression model. It shows the True Positives, True Negatives, False Positives, and False Negatives.
+
+### Model Evaluation - Metrics for Regression
+When we're dealing with regression models, we often use metrics like Mean Absolute Error (MAE), Root Mean Square Error (RMSE), and the Coefficient of Determination (R^2) for evaluation.
+
+*Show code example on screen*
+We calculate these metrics using some synthetic data. MAE gives us the average absolute error, RMSE gives the root of the average squared error, and R^2 tells us how well our features explain the variance in our label.
+
+### Summary
+That brings us to the end of this module. We've covered a lot today, from the basics of supervised machine learning to different algorithms and evaluation metrics. I hope you found this insightful, and I encourage you to practice these concepts to better understand them.
+
+Thank you for joining, and I'll see you in the next module.
