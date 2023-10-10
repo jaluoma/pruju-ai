@@ -4,12 +4,12 @@ import pandas as pd
 from langchain.embeddings import HuggingFaceInstructEmbeddings
 from langchain.vectorstores import FAISS
 
+# Scan files from the course_material directory (or alternative)
+
 material_directory = "course_material/"
 dir_input = input(f"Default materials directory: {material_directory}\nPress enter to keep the same, or write the desired name to change: ")
 if dir_input != '':
     material_directory = dir_input
-# print the path of all files in the directory
-# e.g., course_material/module 1/transcript.txt
 filenames = []
 for root, dirs, files in os.walk(material_directory):
     for name in files:
@@ -20,10 +20,11 @@ for root, dirs, files in os.walk(material_directory):
 print("The following files will be processed:\n")
 print(filenames)
 
-# Remove 'course_material/' from the beginning of each filename
+# Make headings pretty based on file names
+ 
 material_headings = [filename[len(material_directory):] for filename in filenames]
 def pretty_headings(heading):
-    # Replace underscores with spaces
+    # Replace underscores with spaces, / with :
     heading = heading.replace('_', ' ')
     # Remove file extension
     heading = heading.split('.')[0]
@@ -35,7 +36,7 @@ def pretty_headings(heading):
 material_headings = [pretty_headings(heading) for heading in material_headings]
 
 # Loop through suggested material headings and ask the user if they want to change it
-# Enter to keep the same, write the desired name to change
+
 for i, heading in enumerate(material_headings):
     # print(heading)
     user_input = input(f"Suggested heading: {heading}\nPress enter to keep the same, or write the desired name to change:")
@@ -44,7 +45,7 @@ for i, heading in enumerate(material_headings):
 
 print(material_headings)
 
-# Extract text
+# Extract text from the files
 # Supported file formats: https://textract.readthedocs.io/en/stable/ + MarkDown
 texts = []
 for filename in filenames:
@@ -61,11 +62,12 @@ for filename in filenames:
 
     texts.append(text)
 
-
 # Create data frame
+
 df = pd.DataFrame({'Heading': material_headings, 'Text': texts})
 
 # Create chunks
+
 from langchain.text_splitter import CharacterTextSplitter
 text_splitter = CharacterTextSplitter(        
     separator = "\n\n",
@@ -79,25 +81,28 @@ df['Text_Splitted'] = df['Text'].apply(text_splitter.split_text)
 
 
 # Append Heading to the top of chunk
+
 df['Text_Splitted_w_Headings'] = df.apply(lambda row: [row['Heading'] + '\n' + chunk for chunk in row['Text_Splitted']], axis=1)
 
 # Create master chunk
-# One long list of all the text chunks in df['Text_Splitted_w_Headings']
-# This is the input for the vectorstore
+
 master_chunk = []
 for i, row in df.iterrows():
     master_chunk += row['Text_Splitted_w_Headings']
 
 # Create vector store
+
 embeddings = HuggingFaceInstructEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 vector_store = FAISS.from_texts(master_chunk, embeddings)
 
 # Try querying the vector store
+
 query = input("Search the database: ")
 docs = vector_store.similarity_search(query)
 print(docs)
 
 # Ask for the folder to save the database in
+
 folder_figured_out = False
 while folder_figured_out == False:
     folder = input("What folder would you like to save the database in? Default: course_material_vdb \n")
@@ -117,13 +122,16 @@ while folder_figured_out == False:
 print(f"Saving database in {folder}")
 
 # Save the vector store
+
 vector_store.save_local(folder)
 print("Save succcess!")
 
 # Load the vector store for testing
+
 loaded_vector_store = FAISS.load_local(folder, HuggingFaceInstructEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2"))
 
 # Try querying the vector store
+
 query = input("Search the database: ")
 docs = loaded_vector_store.similarity_search(query)
 print(docs)
