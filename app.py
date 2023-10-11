@@ -22,5 +22,8 @@ examples = [example.strip() for example in examples]
 demo = gr.ChatInterface(fn=courseGPT, analytics_enabled=False, examples = examples)
 
 if __name__ == "__main__":
-    print("Launching Demo")
-    demo.launch()   
+    print("Launching Demo\n")
+    server_name = "127.0.0.1"
+    isDocker = os.path.exists("/.dockerenv")
+    print(f"Docker: {isDocker}\n")
+    demo.launch(server_name="0.0.0.0" if isDocker else "127.0.0.1")
