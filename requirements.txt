@@ -3,7 +3,7 @@ gradio
 langchain
 tiktoken
 faiss-cpu
-torch
+torch==2.0.1
 sentence-transformers
 InstructorEmbedding
 openai
