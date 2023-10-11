@@ -12,6 +12,7 @@ from langchain.callbacks import get_openai_callback
 from dotenv import load_dotenv 
 load_dotenv()
 
+
 # Define chat engines
 default_model = "gpt-4"
 fallback_model = "gpt-35-turbo"
@@ -21,8 +22,11 @@ max_default_calls_per_day = int(os.getenv("DEFAULT_MODEL_QUOTA"))
 max_total_calls_per_day = int(os.getenv("TOTAL_MODEL_QUOTA"))
 
 # Log-file definition
+isDocker = os.path.exists("/.dockerenv")
+log_path = "/logs" if isDocker else "logs"
+log_file = f"{log_path}/call_log_{{time:YYYY-MM-DD}}.log"
 logger.remove()
-logger.add("logs/call_log_{time:YYYY-MM-DD}.log", rotation="1 day", format="{time} {message}", level="INFO")
+logger.add(log_file, rotation="1 day", format="{time} {message}", level="INFO")
 
 # Initialize chat model
 
@@ -78,7 +82,7 @@ def check_quota_status():
     except FileNotFoundError:
         daily_calls_sum = 0
         logger.remove()
-        logger.add("logs/call_log_{time:YYYY-MM-DD}.log", rotation="1 day", format="{time} {message}", level="INFO")
+        logger.add(log_file, rotation="1 day", format="{time} {message}", level="INFO")
     return daily_calls_sum
 
 def choose_model(daily_calls_sum):
