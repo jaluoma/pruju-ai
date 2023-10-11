@@ -146,15 +146,20 @@ def query_gpt_chat(query: str, history, max_tokens: int):
 
     #print(str(messages))
 
-    # Query chat model
-    with get_openai_callback() as cb:
-        results = chat(messages)
-    print(cb)
+    if os.getenv('AZURE_OPENAI_KEY') != 'null':
+        # Query chat model
+        with get_openai_callback() as cb:
+            results = chat(messages)
+        print(cb)
 
-    query_statistics = [cb.prompt_tokens, cb.completion_tokens, cb.total_cost, cb.successful_requests]
-    query_statistics = ",".join(str(i) for i in query_statistics)+ " " + str(daily_calls_sum+cb.successful_requests) 
-    logger.info(query_statistics)
-    
-    results_content = results.content
+        # Log statistics
+        query_statistics = [cb.prompt_tokens, cb.completion_tokens, cb.total_cost, cb.successful_requests]
+        query_statistics = ",".join(str(i) for i in query_statistics)+ " " + str(daily_calls_sum+cb.successful_requests) 
+        logger.info(query_statistics)
+        
+        results_content = results.content
+    else:
+        # debug mode:
+        results_content = context
 
     return results_content
