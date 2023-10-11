@@ -78,7 +78,7 @@ def get_daily_calls(log_file):
         
 def check_quota_status():
     try:
-        daily_calls_sum = get_daily_calls(f"logs/call_log_{datetime.now().strftime('%Y-%m-%d')}.log")
+        daily_calls_sum = get_daily_calls(f"{log_path}/call_log_{datetime.now().strftime('%Y-%m-%d')}.log")
     except FileNotFoundError:
         daily_calls_sum = 0
         logger.remove()
