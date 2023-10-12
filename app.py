@@ -18,10 +18,25 @@ def courseGPT(query, chat_history):
 
 with open(os.getenv("CHAT_DATA_FOLDER")+'/examples_ui.txt', 'r') as file: 
     examples = file.readlines()
-
 examples = [example.strip() for example in examples]
 
-demo = gr.ChatInterface(fn=courseGPT, analytics_enabled=False, examples = examples,theme=aaltobluetheme)
+with open(os.getenv("CHAT_DATA_FOLDER")+'/chat_description.txt', 'r') as file: 
+    chat_description = file.read().strip()
+
+chat_description=chat_description.strip()
+
+with open(os.getenv("CHAT_DATA_FOLDER")+'/chat_name.txt', 'r') as file: 
+    chat_name = file.read().strip()
+
+demo = gr.ChatInterface(fn=courseGPT, 
+                        analytics_enabled=False, 
+                        examples = examples,
+                        theme=aaltobluetheme,
+                        title=chat_name,
+                        description=chat_description,
+                        undo_btn="Undo",
+                        retry_btn="Retry",
+                        clear_btn="Clear")
 
 if __name__ == "__main__":
     print("Launching Demo\n")
