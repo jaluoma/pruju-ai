@@ -1,2 +1,2 @@
-<p><em>Please note that this is a work in progress. Expect bugs and quirks.</em></p>
+<p><em>By default, the app uses GPT-4 but after a certain number of requests, it will start to use GPT-3.5 and, eventually, decline all requests. The quota is currently shared between all users and reset every midnight (UTC+3). So, if you're unlucky, please come back another day! :)</em></p>
 <p>&lt;- <a href="/">Back to front page</a></p>
