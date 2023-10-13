@@ -21,16 +21,13 @@ print("The following files will be processed:\n")
 print(filenames)
 
 # Make headings pretty based on file names
+# '_' to ' ', remove file suffixes, title case, "/" to ": " 
  
 material_headings = [filename[len(material_directory):] for filename in filenames]
 def pretty_headings(heading):
-    # Replace underscores with spaces, / with :
     heading = heading.replace('_', ' ')
-    # Remove file extension
     heading = heading.split('.')[0]
-    # Capitalize each word
     heading = heading.title()
-    # Replace 'Word/' with 'Word: '
     heading = heading.replace('/', ': ') 
     return heading
 material_headings = [pretty_headings(heading) for heading in material_headings]
