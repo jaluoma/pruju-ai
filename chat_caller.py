@@ -30,6 +30,7 @@ logger.add(log_file, rotation="1 day", format="{time} {message}", level="INFO")
 
 # Initialize chat model
 
+# TODO: Implement the possibility to use non-Azure OpenAI
 chat = AzureChatOpenAI(
     openai_api_base=os.getenv("GATEWAY_SERVER"),
     openai_api_version="2023-05-15",
