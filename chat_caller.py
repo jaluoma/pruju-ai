@@ -6,16 +6,13 @@ from langchain.schema import AIMessage, SystemMessage, HumanMessage
 from langchain.embeddings import HuggingFaceInstructEmbeddings
 from langchain.vectorstores import FAISS
 from langchain.chat_models import AzureChatOpenAI
-import tiktoken
+from langchain.chat_models import ChatOpenAI
 from langchain.callbacks import get_openai_callback
 
 from dotenv import load_dotenv 
 load_dotenv()
 
-
-# Define chat engines
-default_model = "gpt-4"
-fallback_model = "gpt-35-turbo"
+from utils import purge_memory
 
 # Control parameters
 max_default_calls_per_day = int(os.getenv("DEFAULT_MODEL_QUOTA"))
@@ -30,38 +27,52 @@ logger.add(log_file, rotation="1 day", format="{time} {message}", level="INFO")
 
 # Initialize chat model
 
-# TODO: Implement the possibility to use non-Azure OpenAI
-chat = AzureChatOpenAI(
-    openai_api_base=os.getenv("GATEWAY_SERVER"),
-    openai_api_version="2023-05-15",
-    deployment_name=default_model,
-    openai_api_key=os.getenv("AZURE_OPENAI_KEY"),
-    openai_api_type="azure",
-)
+llm_provider = os.getenv("LLM_PROVIDER")
+print("Using LLM-provider: " + llm_provider)
 
-# Define functions for memory management
+# Define chat engines
 
-def purge_memory(messages, max_tokens: int):
+def initialize_chat(llm_provider):
+    # define chat engines 
+    default_model = "gpt-4"
+    fallback_model = "gpt-35-turbo"
 
-    token_count = token_counter(messages)
-    if (len(messages)>1):
-        while (token_count>max_tokens):
-            # Print purged message for testing purposes
-            # print("Purged the following message:\n" + messages[1].content)
-            messages.pop(1)
-            token_count = token_counter(messages)
-    return
-
-def token_counter(messages):
-    current_model = chat.deployment_name
-    # print("Counting tokens based on: " + current_model)
-    if current_model == default_model:
-        encoding = tiktoken.encoding_for_model("gpt-4")
+    if llm_provider=="azure":
+        chat = AzureChatOpenAI(
+            openai_api_base=os.getenv("AZURE_OPENAI_ENDPOINT"),
+            openai_api_version="2023-05-15",
+            deployment_name=default_model,
+            openai_api_key=os.getenv("AZURE_OPENAI_KEY"),
+            openai_api_type="azure",
+            temperature=0,
+        )
+    elif llm_provider=="openai":
+        chat = ChatOpenAI(temperature=0,
+                        model_name=default_model, 
+                        openai_api_key=os.getenv("OPENAI_API_KEY"))
+        fallback_model = "gpt-3.5-turbo"
     else:
-        encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
-    concatenated_content = ''.join([message.content for message in messages])
-    token_count = len(encoding.encode(concatenated_content))
-    return token_count
+        raise ValueError("LLM-provider not recognized. Check LLM_PROVIDER environment variable.")
+    return chat, default_model, fallback_model
+
+try:
+    chat, default_model, fallback_model = initialize_chat(llm_provider)
+except ValueError as e:
+    print(e)
+    exit(1)
+
+# print("model before change: " + chat.deployment_name)
+def change_chat_engine(chat_model,desired_engine):
+    if isinstance(chat_model,AzureChatOpenAI):
+        chat.deployment_name = desired_engine
+    elif isinstance(chat_model,ChatOpenAI):
+        chat.model_name = desired_engine
+    else:
+        print("Unsupported model detected")
+        return 0
+
+# change_chat_engine(chat,fallback_model)
+# print("model after change: " + chat.deployment_name)
 
 # Book-keeping for quota monitoring 
 
@@ -91,11 +102,11 @@ def choose_model(daily_calls_sum):
         return "END"
     elif daily_calls_sum > max_default_calls_per_day:
         current_model=fallback_model
-        chat.deployment_name=current_model
+        change_chat_engine(chat,current_model)
         return current_model
     else:
         current_model=default_model
-        chat.deployment_name = current_model
+        change_chat_engine(chat,current_model)
         return current_model
     
 # Read knowledge base
@@ -113,7 +124,7 @@ def query_gpt_chat(query: str, history, max_tokens: int):
     daily_calls_sum = check_quota_status()
     current_model = choose_model(daily_calls_sum)
     if current_model == "END":
-        current_model=default_model
+        change_chat_engine(chat,default_model)
         return("I've been dealing with so many requests today that I need to rest a bit. Please come back tomorrow!")
 
     # Search vector store for relevant documents
@@ -144,9 +155,7 @@ def query_gpt_chat(query: str, history, max_tokens: int):
     # Gradio keeps the entire history in memory 
     # Therefore, the messages memory is re-purged on every call once token count max_tokens 
     # print("Message purge")
-    # print("tokens before purge: " + str(token_counter(messages)))
-    purge_memory(messages,max_tokens)
-    # print("tokens after purge: " + str(token_counter(messages)))
+    purge_memory(messages,current_model, max_tokens)
     # print("First message: \n" + str(messages[1].type))
 
     #print(str(messages))
