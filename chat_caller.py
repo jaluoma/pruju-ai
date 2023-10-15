@@ -61,7 +61,6 @@ except ValueError as e:
     print(e)
     exit(1)
 
-# print("model before change: " + chat.deployment_name)
 def change_chat_engine(chat_model,desired_engine):
     if isinstance(chat_model,AzureChatOpenAI):
         chat.deployment_name = desired_engine
@@ -70,9 +69,6 @@ def change_chat_engine(chat_model,desired_engine):
     else:
         print("Unsupported model detected")
         return 0
-
-# change_chat_engine(chat,fallback_model)
-# print("model after change: " + chat.deployment_name)
 
 # Book-keeping for quota monitoring 
 
