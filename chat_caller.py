@@ -51,6 +51,8 @@ def initialize_chat(llm_provider):
                         model_name=default_model, 
                         openai_api_key=os.getenv("OPENAI_API_KEY"))
         fallback_model = "gpt-3.5-turbo"
+    elif llm_provider=="null":
+        chat = None
     else:
         raise ValueError("LLM-provider not recognized. Check LLM_PROVIDER environment variable.")
     return chat, default_model, fallback_model
@@ -156,7 +158,7 @@ def query_gpt_chat(query: str, history, max_tokens: int):
 
     #print(str(messages))
 
-    if os.getenv('AZURE_OPENAI_KEY') != 'null':
+    if llm_provider != 'null':
         # Query chat model
         with get_openai_callback() as cb:
             results = chat(messages)
