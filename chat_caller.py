@@ -127,7 +127,7 @@ def query_gpt_chat(query: str, history, max_tokens: int):
 
     # Search vector store for relevant documents
     docs = vector_store.similarity_search(query)
-    context = "\n---\n".join(doc.page_content for doc in docs)
+    context = "NEW DOCUMENT:\n"+"\nNEW DOCUMENT:\n".join(doc.page_content for doc in docs)
 
     
 
