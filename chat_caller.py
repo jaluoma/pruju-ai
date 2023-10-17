@@ -127,7 +127,9 @@ def query_gpt_chat(query: str, history, max_tokens: int):
 
     # Search vector store for relevant documents
     docs = vector_store.similarity_search(query)
-    context = str(docs)
+    context = "\n---\n".join(doc.page_content for doc in docs)
+
+    
 
     # Combine instructions + context to create system instruction for the chat model
     system_instruction = system_instruction_template + context
