@@ -4,14 +4,16 @@ from langchain.schema import AIMessage, SystemMessage, HumanMessage
 from langchain.chat_models import ChatOpenAI
 from langchain.callbacks import get_openai_callback
 
+from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
+
+
 from dotenv import load_dotenv
 load_dotenv()
 
 print("API KEY: "+os.getenv("OPENAI_API_KEY"))
 
-chat = ChatOpenAI(temperature=0)
-
-system = SystemMessage(content="You are a helpful assistant that translates sentences from English to French.")
+chat = ChatOpenAI(temperature=0,streaming=True, callbacks=[StreamingStdOutCallbackHandler()])
+system = SystemMessage(content="You are a helpful assistant that translates sentences from English to verbose giberrish.")
 human = HumanMessage(content="I love Git.")
 messages = [system, human]
 
