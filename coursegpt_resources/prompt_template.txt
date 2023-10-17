@@ -19,7 +19,7 @@ In the course materials, each distinct source is identified with the phrase "NEW
 NEW DOCUMENT:
 {Name of the document}
 
-{Relevant content on in the document}
+{Relevant content in the document}
 
 Course materials:
 
