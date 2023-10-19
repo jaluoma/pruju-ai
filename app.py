@@ -28,14 +28,7 @@ chat_description=chat_description.strip()
 with open(os.getenv("CHAT_DATA_FOLDER")+'/chat_name.txt', 'r') as file: 
     chat_name = file.read().strip()
 
-CSS ="""
-.contain { display: flex; flex-direction: column; }
-component-0 { height: 100%; }
-chatbot { flex-grow: 1; }
-"""
-
-demo = gr.ChatInterface(css=CSS,
-                        fn=courseGPT, 
+demo = gr.ChatInterface(fn=courseGPT, 
                         analytics_enabled=False, 
                         examples = examples,
                         theme=aaltobluetheme,
