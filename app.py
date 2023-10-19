@@ -51,7 +51,7 @@ with gr.Blocks(theme=aaltobluetheme,
             query = gr.Textbox(show_label=False,
                                 placeholder="Your question.",
                                 scale=10,
-                                container=False)
+                                container=False,autofocus=True)
             submit_button = gr.Button(value="Submit!",scale=1)
     with gr.Row():
         model_choice = gr.Dropdown(choices = [("gpt-3.5-turbo",0), ("gpt-4",1)], 
@@ -61,11 +61,8 @@ with gr.Blocks(theme=aaltobluetheme,
             interactive=True,
             container=False)
         clear = gr.ClearButton([query, chatbot],value="🗑️ Clear history",scale=1)
-
-
-    gr.Examples(examples=examples,inputs=query)
-    gr.Markdown(footer) # does not work
-            
+    #gr.Markdown(footer) # does not work
+    gr.Examples(examples=examples,inputs=query)  
 
 
 
@@ -96,4 +93,5 @@ if __name__ == "__main__":
     isDocker = os.path.exists("/.dockerenv")
     print(f"Docker: {isDocker}\n")
     demo.launch(server_name="0.0.0.0" if isDocker else "127.0.0.1", 
-                root_path="/coursegpt",show_api=False)
+                root_path="/coursegpt",show_api=False,
+                favicon_path=os.getenv("CHAT_DATA_FOLDER")+"/favicon.ico")
