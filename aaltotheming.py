@@ -18,6 +18,7 @@ aaltoblue = Color(
     )
 
 aaltobluetheme = Soft(
-    primary_hue="aaltoblue",secondary_hue="aaltoblue",
+    primary_hue="aaltoblue",#secondary_hue="aaltoblue",
     font=[GoogleFont('Inter'), GoogleFont('Besley')],
+    text_size="sm",
 )

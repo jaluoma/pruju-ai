@@ -1,0 +1,1 @@
+![Aalto University Logo](coursegpt_resources/aalto_logo.png)
