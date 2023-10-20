@@ -46,9 +46,10 @@ footer="![Aalto University Logo](aalto_logo.png)"
 
 with gr.Blocks(theme=aaltobluetheme,
                analytics_enabled=False,
-               title = "CourseGPT") as demo:
+               title = "CourseGPT",
+               ) as demo:
     gr.Markdown(value=chat_header)
-    chatbot = gr.Chatbot(label="CourseGPT",scale=10,show_label=True,
+    chatbot = gr.Chatbot(label="CourseGPT",scale=10,show_label=False,
                          bubble_full_width=False,
                          show_copy_button=True)
     with gr.Group():

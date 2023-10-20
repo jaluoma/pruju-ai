@@ -1,6 +1,7 @@
 from gradio.themes.utils.colors import Color
 from gradio.themes import GoogleFont
 from gradio.themes import Soft
+from gradio.themes.base import Base
 
 aaltoblue = Color(
     name="aaltoblue",
@@ -19,7 +20,16 @@ aaltoblue = Color(
 
 
 
-aaltobluetheme = Soft(primary_hue="aaltoblue",secondary_hue="aaltoblue",
-    #primary_hue="aaltoblue",#secondary_hue="aaltoblue",
-    font=[GoogleFont('Inter'), GoogleFont('Besley')],
+#aaltobluetheme = Soft(primary_hue="aaltoblue",secondary_hue="aaltoblue",
+#    #primary_hue="aaltoblue",#secondary_hue="aaltoblue",
+#    font=[GoogleFont('Inter'), GoogleFont('Besley')]
+#    ,
+#)
+
+class Seafoam(Base):
+    pass
+
+aaltobluetheme = Seafoam(primary_hue="aaltoblue",secondary_hue="aaltoblue",
+    font=[GoogleFont('Inter'), GoogleFont('Besley')]
+    ,
 )
