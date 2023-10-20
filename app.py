@@ -10,7 +10,7 @@ from aaltotheming import aaltobluetheme
 def courseGPT(query, chat_history):
     print("Chat history :" + str(chat_history))
     max_tokens = 2000 # not used?
-    # unpack history
+    # unpack history - consider moving to chat_caller.py
     chat_history_unpacked = []
     for x in chat_history:
         for y in x:
@@ -20,6 +20,9 @@ def courseGPT(query, chat_history):
     chat_history.append((query, answer))
     return "", chat_history
     #return(query_gpt_chat(query,chat_history_unpacked,max_tokens))
+
+# layout, examples, chat_header, theme = unpack_resources(os.getenv("CHAT_DATA_FOLDER"))
+# initialize_layout(layout) 
 
 with open(os.getenv("CHAT_DATA_FOLDER")+'/examples_ui.txt', 'r') as file: 
     examples = file.readlines()
@@ -45,21 +48,23 @@ with gr.Blocks(theme=aaltobluetheme,
                analytics_enabled=False,
                title = "CourseGPT") as demo:
     gr.Markdown(value=chat_header)
-    chatbot = gr.Chatbot(label="CourseGPT",scale=10,show_label=False)
+    chatbot = gr.Chatbot(label="CourseGPT",scale=10,show_label=True,
+                         bubble_full_width=False,
+                         show_copy_button=True)
     with gr.Group():
         with gr.Row():
             query = gr.Textbox(show_label=False,
                                 placeholder="Your question.",
                                 scale=10,
                                 container=False,autofocus=True)
-            submit_button = gr.Button(value="Submit!",scale=1)
+            submit_button = gr.Button(value="Go!",scale=1,variant="primary",min_width=10)
     with gr.Row():
         model_choice = gr.Dropdown(choices = [("gpt-3.5-turbo",0), ("gpt-4",1)], 
             label = "Model choice: ",
             show_label=False, scale=10,
             value=0,
             interactive=True,
-            container=False)
+            container=True)
         clear = gr.ClearButton([query, chatbot],value="🗑️ Clear history",scale=1)
     #gr.Markdown(footer) # does not work
     gr.Examples(examples=examples,inputs=query)  
