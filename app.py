@@ -15,8 +15,8 @@ def courseGPT(query, chat_history):
     for x in chat_history:
         for y in x:
             chat_history_unpacked.append(y)
-    #answer = query_gpt_chat(query,chat_history_unpacked,max_tokens)
-    answer = "You said: "+query
+    answer = query_gpt_chat(query,chat_history_unpacked,max_tokens)
+    #answer = "You said: "+query
     chat_history.append((query, answer))
     return "", chat_history
     #return(query_gpt_chat(query,chat_history_unpacked,max_tokens))
@@ -83,6 +83,7 @@ with gr.Blocks(theme=aaltobluetheme,
     query.submit(fn=courseGPT, inputs=[query, chatbot], outputs=[query, chatbot])
     submit_button.click(fn=courseGPT, inputs=[query, chatbot], outputs=[query, chatbot])
 
+demo.queue(max_size=1)
 # demo = gr.ChatInterface(fn=courseGPT, 
 #                         analytics_enabled=False, 
 #                         examples = examples,
