@@ -12,7 +12,7 @@ from langchain.callbacks import get_openai_callback
 from dotenv import load_dotenv 
 load_dotenv()
 
-from utils import purge_memory
+from chat_utils import purge_memory
 
 # Control parameters
 max_default_calls_per_day = int(os.getenv("DEFAULT_MODEL_QUOTA"))
