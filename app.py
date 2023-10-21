@@ -43,8 +43,8 @@ with gr.Blocks(theme=customtheme,
             clear = gr.ClearButton([query, chatbot],value="🗑️",scale=1,min_width=10,variant='secondary')
             submit_button = gr.Button(value="Go!",scale=6,variant="primary",min_width=10)
 
-    gr.Examples(examples=examples,inputs=query)
     gr.Markdown(value=chat_footer)  
+    gr.Examples(examples=examples,inputs=query)
     query.submit(fn=courseGPT, inputs=[query, chatbot], outputs=[query, chatbot]).success(update_model_status, None, model_md, queue=False)
     submit_button.click(fn=courseGPT, inputs=[query, chatbot], outputs=[query, chatbot]).success(update_model_status, None, model_md, queue=False)
 
