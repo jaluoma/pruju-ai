@@ -9,18 +9,20 @@ import os
 from brand_theming import customtheme
 
 def courseGPT(query, chat_history):
-    max_tokens = 2000 # not used?
+    max_tokens = 0 # deprecated
     # unpack history - consider moving to chat_caller.py
     chat_history_unpacked = []
     for x in chat_history:
         for y in x:
             chat_history_unpacked.append(y)
-    answer = query_gpt_chat(query,chat_history_unpacked,max_tokens)
+    chat_engine, answer = query_gpt_chat(query,chat_history_unpacked,max_tokens)
     chat_history.append((query, answer))
     return "", chat_history
 
 def update_model_status():
-    return "Model: "+choose_model(check_quota_status())
+    model = choose_model(check_quota_status())
+    # print(model)
+    return "Model: " + model
 
 # with gr.Blocks() as demo:
 with gr.Blocks(theme=customtheme, 
@@ -30,8 +32,8 @@ with gr.Blocks(theme=customtheme,
     examples, chat_header, chat_footer = read_course_assets()
     
     gr.Markdown(value=chat_header)
-    model_md = gr.Markdown("Model: "+choose_model(check_quota_status()))
-    chatbot = gr.Chatbot(label="pruju_ai",scale=10,show_label=False,
+    model_md = gr.Markdown("Model: " + choose_model(check_quota_status()))
+    chatbot = gr.Chatbot(label="pruju_ai",scale=10,show_label=True,
                          bubble_full_width=False,
                          show_copy_button=True)
     with gr.Group():
@@ -55,5 +57,5 @@ if __name__ == "__main__":
     print(f"Docker: {isDocker}\n")
     demo.queue(max_size=1)
     demo.launch(server_name="0.0.0.0" if isDocker else "127.0.0.1", 
-                root_path="/coursegpt",show_api=False,
+                root_path="/pruju_ai",show_api=False,
                 favicon_path=os.getenv("CHAT_DATA_FOLDER")+"/favicon.ico")

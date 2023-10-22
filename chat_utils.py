@@ -27,7 +27,7 @@ def purge_memory(messages, model_name, max_tokens: int):
             # Print purged message for testing purposes
             # print("Purged the following message:\n" + messages[1].content)
             messages.pop(1)
-            token_count = token_counter(messages)
+            token_count = token_counter(messages, model_name)
     return
 
 def token_counter(messages, model_name):

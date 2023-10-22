@@ -123,7 +123,7 @@ def query_gpt_chat(query: str, history, max_tokens: int):
     current_model = choose_model(daily_calls_sum)
     if current_model == "END":
         change_chat_engine(chat,default_model)
-        return("I've been dealing with so many requests today that I need to rest a bit. Please come back tomorrow!")
+        return None, "I've been dealing with so many requests today that I need to rest a bit. Please come back tomorrow!"
 
     # Search vector store for relevant documents
     docs = vector_store.similarity_search(query)
@@ -176,4 +176,4 @@ def query_gpt_chat(query: str, history, max_tokens: int):
         # debug mode:
         results_content = context
 
-    return results_content
+    return current_model, results_content
