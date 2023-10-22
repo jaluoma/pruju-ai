@@ -1,1 +1,1 @@
-Please consider giving feedback using [this form](https://link.webropolsurveys.com/S/685DB9CA42C5E82D).
+<font size=2>Note: _The app uses GPT-4 but until a daily quota has been filled (GPT-3.5 after that). If you're unlucky, please come back another day! :)_</font>

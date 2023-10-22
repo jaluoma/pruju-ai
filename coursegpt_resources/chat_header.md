@@ -1,5 +1,5 @@
-# `pruju_ai`
+# Pruju AI
 
-_By default, the app uses GPT-4 but after the daily quota has been filled, it will start to use GPT-3.5. If you're unlucky, please come back another day! :)_
+Please consider giving feedback using [this form](https://link.webropolsurveys.com/S/685DB9CA42C5E82D).
 
 **&lt;- [Back to front page](/)**
