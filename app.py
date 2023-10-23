@@ -57,5 +57,5 @@ if __name__ == "__main__":
     print(f"Docker: {isDocker}\n")
     demo.queue(max_size=1)
     demo.launch(server_name="0.0.0.0" if isDocker else "127.0.0.1", 
-                root_path="/pruju_ai",show_api=False,
+                root_path="/coursegpt",show_api=False,
                 favicon_path=os.getenv("CHAT_DATA_FOLDER")+"/favicon.ico")
