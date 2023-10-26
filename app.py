@@ -55,7 +55,9 @@ if __name__ == "__main__":
     server_name = "127.0.0.1"
     isDocker = os.path.exists("/.dockerenv")
     print(f"Docker: {isDocker}\n")
-    demo.queue(max_size=1)
+    
+    demo.queue(concurrency_count=int(os.getenv("MAX_CONCURRENCY")),
+               max_size=int(os.getenv("MAX_QUEUE")))
     demo.launch(server_name="0.0.0.0" if isDocker else "127.0.0.1", 
                 root_path="/prujuai",show_api=False,
                 favicon_path=os.getenv("CHAT_DATA_FOLDER")+"/favicon.ico")
