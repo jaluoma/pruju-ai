@@ -5,8 +5,8 @@ import os
 from langchain.schema import AIMessage, SystemMessage, HumanMessage
 from langchain.embeddings import HuggingFaceInstructEmbeddings
 from langchain.vectorstores import FAISS
-from langchain.chat_models import AzureChatOpenAI
-from langchain.chat_models import ChatOpenAI
+from langchain.chat_models import AzureChatOpenAI, ChatOpenAI
+from langchain.chat_models import ChatOllama
 from langchain.callbacks import get_openai_callback
 
 from dotenv import load_dotenv 
@@ -51,6 +51,8 @@ def initialize_chat(llm_provider):
                         model_name=default_model, 
                         openai_api_key=os.getenv("OPENAI_API_KEY"))
         fallback_model = "gpt-3.5-turbo"
+    elif llm_provider=="ollama":
+        chat = ChatOllama(model="mistral",temperature=0)
     elif llm_provider=="null":
         chat = None
     else:
@@ -128,8 +130,6 @@ def query_gpt_chat(query: str, history, max_tokens: int):
     # Search vector store for relevant documents
     docs = vector_store.similarity_search(query)
     context = "NEW DOCUMENT:\n"+"\nNEW DOCUMENT:\n".join(doc.page_content for doc in docs)
-
-    
 
     # Combine instructions + context to create system instruction for the chat model
     system_instruction = system_instruction_template + context
