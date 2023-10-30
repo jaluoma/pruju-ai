@@ -19,6 +19,8 @@ def courseGPT(query, chat_history):
     chat_history.append((query, answer))
     return "", chat_history
 
+# Deprecated
+# For simplicity, only one model supported
 def update_model_status():
     model = choose_model(check_quota_status())
     # print(model)
@@ -32,8 +34,9 @@ with gr.Blocks(theme=customtheme,
     examples, chat_header, chat_footer = read_course_assets()
     
     gr.Markdown(value=chat_header)
-    model_md = gr.Markdown("Model: " + choose_model(check_quota_status()))
-    chatbot = gr.Chatbot(label="pruju_ai",scale=10,show_label=True,
+    #model_md = gr.Markdown("Model: " + choose_model(check_quota_status()))
+    chatbot = gr.Chatbot(label="Model: " + choose_model(check_quota_status()),
+                         scale=10,show_label=True,
                          bubble_full_width=False,
                          show_copy_button=True)
     with gr.Group():
@@ -47,8 +50,8 @@ with gr.Blocks(theme=customtheme,
 
     gr.Markdown(value=chat_footer)  
     gr.Examples(examples=examples,inputs=query)
-    query.submit(fn=courseGPT, inputs=[query, chatbot], outputs=[query, chatbot]).success(update_model_status, None, model_md, queue=False)
-    submit_button.click(fn=courseGPT, inputs=[query, chatbot], outputs=[query, chatbot]).success(update_model_status, None, model_md, queue=False)
+    query.submit(fn=courseGPT, inputs=[query, chatbot], outputs=[query, chatbot])#.success(update_model_status, None, model_md, queue=False)
+    submit_button.click(fn=courseGPT, inputs=[query, chatbot], outputs=[query, chatbot])#.success(update_model_status, None, model_md, queue=False)
 
 if __name__ == "__main__":
     print("Launching Demo\n")

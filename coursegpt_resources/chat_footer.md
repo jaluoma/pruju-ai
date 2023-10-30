@@ -1,1 +1,1 @@
-<font size=2>Note: _The app uses GPT-4 until a daily quota has been filled (GPT-3.5 after that). If you're unlucky, please come back another day! :)_</font>
+<font size=2>Note: _The number of concurrent calls is limited. The call queue will be processed on a first come, first served basis. The app has limited daily call quota. If you're unlucky, please come back another day! :)_</font>

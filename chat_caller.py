@@ -15,7 +15,7 @@ load_dotenv()
 from chat_utils import purge_memory
 
 # Control parameters
-max_default_calls_per_day = int(os.getenv("DEFAULT_MODEL_QUOTA"))
+max_default_calls_per_day = int(os.getenv("TOTAL_MODEL_QUOTA")) #int(os.getenv("DEFAULT_MODEL_QUOTA"))
 max_total_calls_per_day = int(os.getenv("TOTAL_MODEL_QUOTA"))
 
 # Log-file definition
@@ -33,7 +33,7 @@ print("Using LLM-provider: " + llm_provider)
 # Define chat engines
 
 def initialize_chat(llm_provider):
-    # define chat engines 
+    # define chat engines
     default_model = "gpt-4"
     fallback_model = "gpt-35-turbo"
 
@@ -52,7 +52,9 @@ def initialize_chat(llm_provider):
                         openai_api_key=os.getenv("OPENAI_API_KEY"))
         fallback_model = "gpt-3.5-turbo"
     elif llm_provider=="ollama":
-        chat = ChatOllama(model=os.getenv("OLLAMA_MODEL_NAME"),temperature=0)
+        default_model = os.getenv("OLLAMA_MODEL_NAME")
+        fallback_model = os.getenv("OLLAMA_MODEL_NAME")
+        chat = ChatOllama(model=default_model,temperature=0)
     elif llm_provider=="null":
         chat = None
     else:
@@ -70,6 +72,8 @@ def change_chat_engine(chat_model,desired_engine):
         chat.deployment_name = desired_engine
     elif isinstance(chat_model,ChatOpenAI):
         chat.model_name = desired_engine
+    elif isinstance(chat_model,ChatOllama):
+        chat.model = desired_engine
     else:
         print("Unsupported model detected")
         return 0

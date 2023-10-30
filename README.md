@@ -10,7 +10,7 @@ The app works with OpenAI's API and Microsoft's Azure OpenAI Service. The app al
 
 # Getting started
 
-The instructions are for macOS but should work with Linux and Windows (with small modifications).
+The instructions are for macOS but should work with Linux and (with small modifications) Windows, too.
 
 Clone the repo, create a virtual environment, and install required dependencies.
 
@@ -55,14 +55,14 @@ LLM_PROVIDER="openai"
 OPENAI_API_KEY="your-secret-key-goes-here" # Use this if you use non-Azure OpenAI 
 ```
 
-If you choose ollama, you only need to set:
+If you choose ollama, you need to define the model to be used.
 
 ```
 LLM_PROVIDER="ollama"
 OLLAMA_MODEL_NAME="mistral"
 ```
 
-In the case of Ollama, you need to  install Ollama and run `ollama serve <modelname>` to serve the model to `127.0.0.1:11434`. Only Mistral 7B has been tested so far. The basic functionality works, but it's not implemented to the same standards as Azure OpenAI and OpenAI API.
+In the case of Ollama, you need to  install Ollama and run `ollama serve <modelname>` to serve the model to `127.0.0.1:11434`. Only Mistral 7B has been tested so far. The basic functionality works, but it's not implemented to the same standard as Azure OpenAI API and OpenAI API.
 
 # Launch the app
 
@@ -106,16 +106,6 @@ The project is currently in a working demo state, with lots of room for improvem
 - _New features_: For example, alternative assistance modes (e.g., simple Q&A, prepping for exam, reflective discussions) coudl be useful.
 - _Technical improvements_: For example, the app has not been optimized for large use volumes.
 - _Support for alternative LLMs_: The app was originally designed to run with OpenAI's ChatGPT, but because the app uses lanchain to make the API calls, it can be integrated with many other LLMs with relative ease.
-
-# Contributing
-
-The project is open to contributions. This repository is in the process of migrating to GitHub.
-
-- Test it, use it, enjoy it!
-- Provide feedback and ideas
-- Contribute code
-
-If you contribute code, you promise that you are in a legal position to do so, and that you permit the project to license to use the code in the project without restrictions.
 
 # Acknowledgements
 
