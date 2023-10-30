@@ -1,8 +1,16 @@
 # Introduction
 
-Course-gpt is a course assistant app based on retrieval-augmented generation and large language models. It uses `gradio` to render the front end `langchain` to retrieve documents and communicate with the large language model. By default it uses Azure/OpenAI, but you should be able to change this to any chat model supported by langchain.
+Pruju AI is a teaching assistant that allows students to interact with the teacher's course materials. The assistant is designed to answer any student question, but _only if_ the answer can be found in the course materials provided by the teacher (e.g., syllabus, slides, lecture transcripts). The assistant can also be guided to answer in ways that align with the course’s pedagogical objectives. For example, the assistant can be told to _not_ answer certain questions or to answer in a particular way.
+
+The project exists to make creating virtual teaching assistants as easy as possible. From a pedagogical point of view, it is essential to be able to control the knowledge base of the assistant as well as the types of answers that the assistant provides to the student's questions.
+
+The app can be configured to work with the teacher's own materials without any coding. You do need to modify some text files and run one Python script to make it your own. You can also use the code as a starting point for more sophisticated and customized setups. In the grander scheme of things, the project hopes to inspire the development of an open-source software ecosystem around AI in higher education.
+
+The app works with OpenAI's API and Microsoft's Azure OpenAI Service. The app also provides rudimentary support for Ollama. Ollama supports a wider range of open-source models (e.g., Mistral 7B, Llama 2).
 
 # Getting started
+
+The instructions are for macOS but should work with Linux and Windows (with small modifications).
 
 Clone the repo, create a virtual environment, and install required dependencies.
 
@@ -10,13 +18,51 @@ Clone the repo, create a virtual environment, and install required dependencies.
 (.venv) foo@bar ~$: pip install -r requirements
 ```
 
-You should create a .env file with contents something like this:
+## Create and edit .env
+
+You should create a .env file that contains at least the following:
 
 ```
-AZURE_OPENAI_KEY = "your-secret-key-goes-here"
-AZURE_OPENAI_TEMPERATURE = "0"
-CHAT_DATA_FOLDER ="syllabusgpt"
+# Directory for your course data:
+CHAT_DATA_FOLDER ="coursegpt_resources" 
+# How many times the default model can be called before a fallback model is used
+# For (Azure) OpenAI: default is gpt-4, fallback is gpt-3.5
+DEFAULT_MODEL_QUOTA=3
+# Total call quota (default + fallback)
+TOTAL_MODEL_QUOTA=5
+MAX_PROMPT_TOKENS=2000
+# Capacity management:
+MAX_CONCURRENCY=2
+MAX_QUEUE=10
 ```
+
+## LLM-provider specific environment variables
+
+You can currently choose between "azure" (Microsoft's Azure OpenAI Service), "openai" (OpenAI's own API), or "ollama" (Ollama).
+
+If you choose azure, you must define the API endpoint and API key:
+
+```
+LLM_PROVIDER="azure"
+AZURE_OPENAI_KEY = "your-secret-key-goes-here" 
+AZURE_OPENAI_ENDPOINT="https://your-azure-endpoint"
+```
+
+If you choose openai, you must define the API key:
+
+```
+LLM_PROVIDER="openai"
+OPENAI_API_KEY="your-secret-key-goes-here" # Use this if you use non-Azure OpenAI 
+```
+
+If you choose ollama, you only need to set:
+
+```
+LLM_PROVIDER="ollama"
+OLLAMA_MODEL_NAME="mistral"
+```
+
+In the case of Ollama, you need to  install Ollama and run `ollama serve <modelname>` to serve the model to `127.0.0.1:11434`. Only Mistral 7B has been tested so far. The basic functionality works, but it's not implemented to the same standards as Azure OpenAI and OpenAI API.
 
 # Launch the app
 
@@ -30,47 +76,47 @@ Once the app is running, it will tell you the address where you can find the cha
 
 # Course materials
 
-The variable `CHAT_DATA_FOLDER` in the .env file tells the app where to look for the course materials. Please see `langchain` [FAISS](https://python.langchain.com/docs/integrations/vectorstores/faiss) documentation to see how to use your own course materials. In practice, the course materials are read into small text chunks that look something like this:
+The variable `CHAT_DATA_FOLDER` in the .env file tells the app where to look for the course materials. It is basically a bunch of text files, markdown documents, pictures, and - most importantly - a vector store that contains the teaching materials.
 
+Everything else can be set up simply by editing text/markdown files and moving some files around. However, to read your own materials to a vector store, you should run:
+
+```bash
+(.venv) foo@bar ~$: python3 read_to_vectorstore.py
 ```
-'Source: Week: 5 slides\n\nTechniques in Text Analytics\n\n- Text Preprocessing: Tokenization, stemming, etc.\x0b- Text Vectorization: Count vectorization, TF-IDF.\x0b- Sentiment Analysis: Determining the sentiment expressed in text.\n\n\nApplications in Business\n\n- Customer Feedback Analysis: Understanding customer sentiments.\x0b- Keyword Extraction: Identifying important topics in customer reviews.\x0b- Chatbot Training: Training intelligent chatbots to handle customer queries.\n\n\nSummary\n\n- We covered basic techniques in text analytics'
-```
 
-These are then processed using a text embeddings models and stored in a FAISS vector store. Something along the lines of:
-
-```python
-embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-xl")
-knowledge_base = FAISS.from_texts(master_chunk, embeddings) # master_chunk is a list of strings
-
-# Test performing a search:
-query = input("Search the database: ")
-docs = knowledge_base.similarity_search(query)
-print(docs)
-
-knowledge_base.save_local("faiss_local")
-```
+The script will read your course materials from a given location (`./course_material` by defaul) and store them to a [FAISS](https://python.langchain.com/docs/integrations/vectorstores/faiss) vector store (by default `./course_material_vdb`). Once you are done, move the `index.faiss` and `index.pkl` files to `$CHAT_DATA_FOLDER/faiss_index`.
 
 # Prompt engineering
 
-The chatbot reads general system instructions from `prompt_template.txt` in the `CHAT_DATA_FOLDER` directory. The instructions may look something like this:
+The chatbot reads general system instructions from `prompt_template.txt` in the `CHAT_DATA_FOLDER` directory. Edit the instructions to get desired assistant behavior.
 
-```
-You are a helpful teaching assistant of a course in business analytics. 
-Your task is to answer the students' question based on relevant course materials (see "Course materials" below).
-Here are some further guidelines:
-- Always refer explicitly to the course materials in your answers.
-- You should not cite sources outside the course materials.  
-- Add a segment called "For more information, see:" in your answer 
-(e.g., For more information, see: Week 1 lecture slides, Week 2 transcript). 
-- You should decline to answer questions that are not covered in the course materials.
-- You should decline students' requests to write Python code. 
-- However, you can provide general tips concerning the students' coding-related questions based on the course materials.
-- You can also help students debug their code.
-- Refer the student to the course teachers or university administration if you are unable to help.
+# Required custom configurations files
 
-Always be encouraging and supportive!
+There are a bunch of other things you need to configure in your custom data folder before it works. As a starting point, you can just copy the files from the default folder.
 
-Course materials:
-```
+- `favicon.ico` is the icon of the app.
+- `chat_header.md` provides a modifiable description of your app that is displayed above the chat interface.
+- `chat_footer.md` as above, but below the chat interface.
+- `examples_ui.txt` defines the examples that help the user start asking useful questions.
 
-You can define the example questions in the file `examples_ui.txt` in the `CHAT_DATA_FOLDER` directory. These are shown to the user in the chatbot interface as examples of what to ask.
+# Project status
+
+The project is currently in a working demo state, with lots of room for improvement. Some possible directions for further development: 
+
+- _New features_: For example, alternative assistance modes (e.g., simple Q&A, prepping for exam, reflective discussions) coudl be useful.
+- _Technical improvements_: For example, the app has not been optimized for large use volumes.
+- _Support for alternative LLMs_: The app was originally designed to run with OpenAI's ChatGPT, but because the app uses lanchain to make the API calls, it can be integrated with many other LLMs with relative ease.
+
+# Contributing
+
+The project is open to contributions. This repository is in the process of migrating to GitHub.
+
+- Test it, use it, enjoy it!
+- Provide feedback and ideas
+- Contribute code
+
+If you contribute code, you promise that you are in a legal position to do so, and that you permit the project to license to use the code in the project without restrictions.
+
+# Acknowledgements
+
+[Enrico Glerean](https://github.com/eglerean) provided invaluable advice on many aspects of the project. [Thomas Pfau](https://github.com/tpfau) contributed code and provided many crucial technical insights along the way.

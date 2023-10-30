@@ -52,7 +52,7 @@ def initialize_chat(llm_provider):
                         openai_api_key=os.getenv("OPENAI_API_KEY"))
         fallback_model = "gpt-3.5-turbo"
     elif llm_provider=="ollama":
-        chat = ChatOllama(model="mistral",temperature=0)
+        chat = ChatOllama(model=os.getenv("OLLAMA_MODEL_NAME"),temperature=0)
     elif llm_provider=="null":
         chat = None
     else:
