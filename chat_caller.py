@@ -131,7 +131,7 @@ def provide_context_for_question(query, smart_search=False):
              HumanMessage(content=query)]
         ).content
         change_chat_engine(chat,default_model)
-    print(query)
+    #print(query)
     docs = vector_store.similarity_search(query)
     context = "NEW DOCUMENT:\n"+"\nNEW DOCUMENT:\n".join(doc.page_content for doc in docs)
     return context
