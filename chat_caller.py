@@ -29,6 +29,7 @@ logger.add(log_file, rotation="1 day", format="{time} {message}", level="INFO")
 
 llm_provider = os.getenv("LLM_PROVIDER")
 print("Using LLM-provider: " + llm_provider)
+doc_language="English"
 
 # Define chat engines
 
@@ -113,6 +114,28 @@ def choose_model(daily_calls_sum):
         change_chat_engine(chat,current_model)
         return current_model
     
+def provide_context_for_question(query, smart_search=False):
+    if smart_search==True:
+        change_chat_engine(chat,fallback_model)
+        system="""
+        You are an AI that provides assistance in database search. 
+        Please translate the user's query to a list of search keywords
+        that will be helpful in retrieving documents from a database
+        based on similarity.
+        The language of the keywords should match the language of the documents: 
+        """+doc_language+"""\n
+        Answer with a list of keywords.
+        """
+        query=chat(
+            [SystemMessage(content=system),
+             HumanMessage(content=query)]
+        ).content
+        change_chat_engine(chat,default_model)
+    print(query)
+    docs = vector_store.similarity_search(query)
+    context = "NEW DOCUMENT:\n"+"\nNEW DOCUMENT:\n".join(doc.page_content for doc in docs)
+    return context
+
 # Read knowledge base
 os.environ['TOKENIZERS_PARALLELISM'] = 'false' # Avoid warning: https://github.com/huggingface/transformers/issues/5486
 vector_store = FAISS.load_local(os.getenv("CHAT_DATA_FOLDER")+"/faiss_index", HuggingFaceInstructEmbeddings(cache_folder=os.getenv("MODEL_CACHE"), model_name="sentence-transformers/all-MiniLM-L6-v2"))
@@ -132,8 +155,7 @@ def query_gpt_chat(query: str, history, max_tokens: int):
         return None, "I've been dealing with so many requests today that I need to rest a bit. Please come back tomorrow!"
 
     # Search vector store for relevant documents
-    docs = vector_store.similarity_search(query)
-    context = "NEW DOCUMENT:\n"+"\nNEW DOCUMENT:\n".join(doc.page_content for doc in docs)
+    context = provide_context_for_question(query)
 
     # Combine instructions + context to create system instruction for the chat model
     system_instruction = system_instruction_template + context
