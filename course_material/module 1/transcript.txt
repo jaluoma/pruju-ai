@@ -1,0 +1,23 @@
+
+[Slide 1: Title Slide]
+Hello, everyone! Welcome to this course on Business Analytics with Python. Today, we're diving into Module 1, where we'll cover basic data manipulation and descriptive statistics. Are you ready to begin this exciting journey into the world of data analytics? Great! Grab your coffee or tea, and let's get started.
+
+[Slide 2: Introduction]
+Before we delve into the nitty-gritty of data analysis, let's take a moment to discuss why we're all here. Business Analytics isn't just a buzzword; it's a crucial skill set that enables us to make informed decisions based on data. In the business world, data drives everything from sales forecasts and customer segmentation to inventory management and beyond. So, what's our go-to tool for data manipulation and analysis? That's right, it's Python—a versatile programming language that's perfect for data analysis.
+
+[Slide 3: Why Python?]
+You might wonder, why Python? Well, Python is known for its simplicity and readability, not to mention a wide array of libraries for data manipulation, like Pandas and NumPy. This makes it a go-to language for analysts and data scientists alike.
+
+[Slide 4: Data Structures]
+Let's start by understanding the basic data structures in Python. We have lists, dictionaries, and tuples. Knowing how to use these effectively is like knowing your ABCs before you start to read.
+
+[Slide 5: Pandas Library]
+Now, meet Pandas, Python's data manipulation library. With Pandas, you can do everything from data cleaning to data transformation, and it works seamlessly with other Python libraries.
+
+[Slide 16: Summary]
+So, to wrap things up, what have we covered today? Quite a bit, actually! We've gone through basic data structures, delved deep into data manipulation using Pandas, explored descriptive statistics, and even created a bar chart. You're well on your way to becoming a data-savvy business analyst.
+
+[Slide 17: Q&A]
+That brings us to the end of today's session. I hope you found this introduction to data manipulation and descriptive statistics useful. Do you have any questions? Feel free to ask now, or you can always reach out later.
+
+Thank you for your attention, and I look forward to seeing you in the next module!

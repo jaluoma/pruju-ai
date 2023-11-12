@@ -1,0 +1,23 @@
+
+[Slide 1: Title Slide]
+Hello again, everyone! Welcome back to our course on Business Analytics with Python. Today, we're moving on to Module 2. We'll be focusing on basic statistical tests, like the t-test and ANOVA, as well as regression analysis. So, let's dive right in and continue building on the foundation we laid in the last module.
+
+[Slide 2: Introduction]
+Before we jump into the details, let's discuss why statistical tests are important. In the world of business, we often have hypotheses or theories that we want to test. For example, is there a significant difference in sales between two different regions? Statistical tests help us answer questions like these with confidence.
+
+[Slide 3: What is a t-test?]
+So, what exactly is a t-test? In simple terms, a t-test allows us to compare the means of two groups to see if they are statistically different. This is incredibly useful in business. For example, it can help us understand if a marketing campaign was more effective in one region compared to another.
+
+[Slide 4: ANOVA]
+Now, let's talk about ANOVA, which stands for Analysis of Variance. ANOVA is used when you want to compare the means of more than two groups. It's like an extended version of the t-test and is particularly useful in product testing scenarios.
+
+[Slide 5: Regression Analysis]
+Last but not least, we'll discuss regression analysis. This allows us to understand the relationship between variables. For example, how does the price of a product affect its sales? Regression analysis can give us valuable insights into these kinds of relationships.
+
+[Slide 16: Summary]
+In summary, we've covered a lot today—t-tests, ANOVA, and regression analysis. These are powerful tools that can help you make informed business decisions based on data.
+
+[Slide 17: Q&A]
+We've come to the end of today's session. I hope you're leaving with a deeper understanding of statistical tests and their applications in business. If you have any questions, now's the time to ask.
+
+Thank you for your participation, and I'm excited to continue this learning journey with you in the next module!
