@@ -28,9 +28,9 @@ LLM_PROVIDER="openai"
 MODEL_NAME="gpt-4"
 # Directory for your course data:
 CHAT_DATA_FOLDER ="prujuai_resources" 
-# Total call quota:
+# Total model call quota:
 TOTAL_MODEL_QUOTA=5
-# Total call quota:
+# Max number of tokens per call
 MAX_PROMPT_TOKENS=2000
 # Capacity management:
 MAX_CONCURRENCY=2
