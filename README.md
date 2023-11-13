@@ -45,6 +45,7 @@ If you choose openai, you must define the API key:
 
 ```
 LLM_PROVIDER="openai"
+MODEL_NAME="gpt-4"
 OPENAI_API_KEY="your-secret-key-goes-here"
 ```
 
@@ -52,6 +53,7 @@ If you choose azure, you must define the API endpoint and API key:
 
 ```
 LLM_PROVIDER="azure"
+MODEL_NAME="gpt-4"
 OPENAI_API_KEY = "your-secret-key-goes-here" 
 MODEL_ENDPOINT="https://your-azure-endpoint"
 # Optionally, you can define:
@@ -63,7 +65,7 @@ If you choose ollama, you need to define the model to be used.
 
 ```
 LLM_PROVIDER="ollama"
-OLLAMA_MODEL_NAME="mistral"
+MODEL_NAME="mistral"
 ```
 
 In the case of Ollama, you need to  install Ollama and run `ollama serve <modelname>` to serve the model to `127.0.0.1:11434`. Only Mistral 7B has been tested so far. The basic functionality works, but is not extensively tested.
