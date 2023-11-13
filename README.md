@@ -27,7 +27,7 @@ You should create a .env file that contains at least the following:
 LLM_PROVIDER="openai"
 MODEL_NAME="gpt-4"
 # Directory for your course data:
-CHAT_DATA_FOLDER ="coursegpt_resources" 
+CHAT_DATA_FOLDER ="prujuai_resources" 
 # Total call quota:
 TOTAL_MODEL_QUOTA=5
 # Total call quota:
@@ -45,7 +45,7 @@ If you choose openai, you must define the API key:
 
 ```
 LLM_PROVIDER="openai"
-OPENAI_API_KEY="your-secret-key-goes-here" # Use this if you use non-Azure OpenAI 
+OPENAI_API_KEY="your-secret-key-goes-here"
 ```
 
 If you choose azure, you must define the API endpoint and API key:
@@ -57,7 +57,6 @@ MODEL_ENDPOINT="https://your-azure-endpoint"
 # Optionally, you can define:
 AZURE_OPENAI_CUSTOM_BACKEND = "/custom/url/back/end/other/than/chat/completions"
 AZURE_OPENAI_CUSTOM_HEADER="Some-Custom-Authentication-Header"
-AZURE_OPENAI_CUSTOM_BACKEND="/v1/chat/gpt4-8k"
 ```
 
 If you choose ollama, you need to define the model to be used.
@@ -79,40 +78,33 @@ Run:
 
 Once the app is running, it will tell you the address where you can find the chatbot interface.
 
-# Course materials
+# Bring your own course materials
 
-The variable `CHAT_DATA_FOLDER` in the .env file tells the app where to look for the course materials. It is basically a bunch of text files, markdown documents, pictures, and - most importantly - a vector store that contains the teaching materials.
+To get started, create a copy of the `prujuai_resources` directory and give it a name that you like (e.g., `mycourse_resources`) Then modify the .env file so that the app knows where to look for the files (e.g. `CHAT_DATA_FOLDER="mycourse_resources"`). In this new directory, modify the following files to your liking:
 
-Everything else can be set up simply by editing text/markdown files and moving some files around. However, to read your own materials to a vector store, you should run:
+- `prompt_template.txt` provides the general system instructions for the chatbot
+- `examples_ui.txt` defines the examples that help the user start asking useful questions
+- `favicon.ico` is the icon of the app
+- `chat_header.md` provides a modifiable description of your app that is displayed above the chat interface
+- `chat_footer.md` as above, but below the chat interface
+
+To read your own materials to a vector store, you should run:
 
 ```bash
-(.venv) foo@bar ~$: python3 read_to_vectorstore.py -u
+(.venv) foo@bar ~$: python3 read_to_vectorstore.py
 ```
 
-The script will read your course materials from a given location (`./course_material` by defaul) and store them to a [FAISS](https://python.langchain.com/docs/integrations/vectorstores/faiss) vector store (by default `./course_material_vdb`). Once you are done, move the `index.faiss` and `index.pkl` files to `CHAT_DATA_FOLDER/faiss_index`. For more help on the Python script, run:
+The script will read your course materials from a given location (`./course_material` by default) and store them to a [FAISS](https://python.langchain.com/docs/integrations/vectorstores/faiss) vector store (by default `./course_material_vdb`). Once you are done, move the `index.faiss` and `index.pkl` files to `CHAT_DATA_FOLDER/faiss_index`. If you want more options, such as running the script in non-interactive mode with sensible default, run the script with -h:
 
 ```bash
 (.venv) foo@bar ~$: python3 read_to_vectorstore.py -h
 ```
 
-# Prompt engineering
-
-The chatbot reads general system instructions from `prompt_template.txt` in the `CHAT_DATA_FOLDER` directory. Edit the instructions to get desired assistant behavior.
-
-# Required custom configurations files
-
-There are a bunch of other things you need to configure in your custom data folder before it works. As a starting point, you can just copy the files from the default folder.
-
-- `favicon.ico` is the icon of the app.
-- `chat_header.md` provides a modifiable description of your app that is displayed above the chat interface.
-- `chat_footer.md` as above, but below the chat interface.
-- `examples_ui.txt` defines the examples that help the user start asking useful questions.
-
 # Project status
 
-The project is currently in a working demo state, with lots of room for improvement. Some possible directions for further development: 
+The project is currently in a working demo state, with loads of room for improvement. Some possible directions for further development: 
 
-- _New features_: For example, alternative assistance modes (e.g., simple Q&A, prepping for exam, reflective discussions) could be useful. UI for chatbot customization à la GPT Builder.
+- _New features_: For example, alternative assistance modes (e.g., simple Q&A, prepping for exam, reflective discussions) could be useful. A user interface for no-code chatbot customization à la GPT Builder would help nice, too.
 - _Technical improvements_: For example, the app has not been optimized for large use volumes.
 - _Support for alternative LLMs_: The app was originally designed to run with OpenAI's ChatGPT, but because the app uses lanchain to make the API calls, it can be integrated with many other LLMs with relative ease.
 
