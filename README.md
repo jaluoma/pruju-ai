@@ -96,7 +96,7 @@ To read your own materials to a vector store, you should run:
 (.venv) foo@bar ~$: python3 read_to_vectorstore.py
 ```
 
-The script will read your course materials from a given location (`./course_material` by default) and store them to a [FAISS](https://python.langchain.com/docs/integrations/vectorstores/faiss) vector store (by default `./course_material_vdb`). Once you are done, move the `index.faiss` and `index.pkl` files to `CHAT_DATA_FOLDER/faiss_index`. If you want more options, such as running the script in non-interactive mode with sensible default, run the script with -h:
+The script will read your course materials from a given location (`./course_material` by default) and store them to a [FAISS](https://python.langchain.com/docs/integrations/vectorstores/faiss) vector store (by default `./course_material_vdb`). Once you are done, move the `index.faiss` and `index.pkl` files to `CHAT_DATA_FOLDER/faiss_index`. If you want more options, such as running the script in non-interactive mode with sensible defaults, run the script with -h:
 
 ```bash
 (.venv) foo@bar ~$: python3 read_to_vectorstore.py -h
