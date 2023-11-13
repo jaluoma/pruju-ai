@@ -15,7 +15,7 @@ The instructions are for macOS but should work with Linux and (with small modifi
 Clone the repo, create a virtual environment, and install required dependencies.
 
 ```bash
-(.venv) foo@bar ~$: pip install -r requirements
+(.venv) foo@bar ~$: pip install -r requirements.txt
 ```
 
 ## Create and edit .env
