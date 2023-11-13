@@ -28,8 +28,9 @@ def purge_memory(messages, model_name, max_tokens: int):
             # print("Purged the following message:\n" + messages[1].content)
             messages.pop(1)
             token_count = token_counter(messages, model_name)
-    return
+    return token_count
 
+# PROMPT TOKEN COUNT DOES NOT EXACTLY MATCH OPENAI COUNT
 def token_counter(messages, model_name):
     # print("Counting tokens based on: " + current_model)
     if model_name == "gpt-4":

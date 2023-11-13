@@ -8,23 +8,15 @@ import os
 
 from brand_theming import customtheme
 
-def courseGPT(query, chat_history):
-    max_tokens = 0 # deprecated
-    # unpack history - consider moving to chat_caller.py
+def call_chat(query, chat_history):
+    # unpack history
     chat_history_unpacked = []
     for x in chat_history:
         for y in x:
             chat_history_unpacked.append(y)
-    chat_engine, answer = query_gpt_chat(query,chat_history_unpacked,max_tokens)
+    chat_engine, answer = query_gpt_chat(query,chat_history_unpacked)
     chat_history.append((query, answer))
     return "", chat_history
-
-# Deprecated
-# For simplicity, only one model supported
-def update_model_status():
-    model = choose_model(check_quota_status())
-    # print(model)
-    return "Model: " + model
 
 # with gr.Blocks() as demo:
 with gr.Blocks(theme=customtheme, 
@@ -34,7 +26,6 @@ with gr.Blocks(theme=customtheme,
     examples, chat_header, chat_footer = read_course_assets()
     
     gr.Markdown(value=chat_header)
-    #model_md = gr.Markdown("Model: " + choose_model(check_quota_status()))
     chatbot = gr.Chatbot(label="Model: " + choose_model(check_quota_status()),
                          scale=10,show_label=True,
                          bubble_full_width=False,
@@ -50,8 +41,8 @@ with gr.Blocks(theme=customtheme,
 
     gr.Markdown(value=chat_footer)  
     gr.Examples(examples=examples,inputs=query)
-    query.submit(fn=courseGPT, inputs=[query, chatbot], outputs=[query, chatbot])#.success(update_model_status, None, model_md, queue=False)
-    submit_button.click(fn=courseGPT, inputs=[query, chatbot], outputs=[query, chatbot])#.success(update_model_status, None, model_md, queue=False)
+    query.submit(fn=call_chat, inputs=[query, chatbot], outputs=[query, chatbot])
+    submit_button.click(fn=call_chat, inputs=[query, chatbot], outputs=[query, chatbot])
 
 if __name__ == "__main__":
     print("Launching Demo\n")
