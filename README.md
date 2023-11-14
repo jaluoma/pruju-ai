@@ -102,12 +102,14 @@ The script will read your course materials from a given location (`./course_mate
 (.venv) foo@bar ~$: python3 read_to_vectorstore.py -h
 ```
 
+The default course materials are from an imaginary course called _Primer on Business Analytics with Python_, produced with the help of ChatGPT (GPT-4) for demonstration purposes. The example materials (`course_materials`) include lecture slides, lecture transcripts and Python scripting tutorials.
+
 # Project status
 
 The project is currently in a working demo state, with loads of room for improvement. Some possible directions for further development: 
 
-- _New features_: For example, alternative assistance modes (e.g., simple Q&A, prepping for exam, reflective discussions) could be useful. A user interface for no-code chatbot customization à la GPT Builder would help nice, too.
-- _Technical improvements_: For example, the app has not been optimized for large use volumes.
+- _New features_: Alternative assistance modes (e.g., simple Q&A, prepping for exam, reflective discussions), a user interface for no-code chatbot customization à la OpenAI's GPT Builder.
+- _Technical improvements_: The app has not been tested or optimized for large use volumes.
 - _Support for alternative LLMs_: The app was originally designed to run with OpenAI's ChatGPT, but because the app uses lanchain to make the API calls, it can be integrated with many other LLMs with relative ease.
 
 # Acknowledgements
