@@ -10,38 +10,45 @@ messages = []
 messages.append(SystemMessage(content="You are a helpful assistant that translates sentences from English to French."))
 messages.append(HumanMessage(content="I love Git."))
 
-chat = ChatOpenAI(temperature=0,
-                model_name="gpt-4",)
+if os.getenv("LLM_PROVIDER") == "openai":
 
-chat.default_headers= {"Authorization": "Bearer "+os.environ.get("OPENAI_API_KEY")}
+    chat = ChatOpenAI(temperature=0,
+                    model_name="gpt-4",)
 
-with get_openai_callback() as cb:
-    results = chat(messages)
-print(cb)
-print(results)
+    chat.default_headers= {"Authorization": "Bearer "+os.environ.get("OPENAI_API_KEY")}
 
-import httpx
+    with get_openai_callback() as cb:
+        results = chat(messages)
+    print(cb)
+    print(results)
 
-def update_base_url(request: httpx.Request) -> None:
-    if request.url.path == "/chat/completions":
-        request.url = request.url.copy_with(path="/v1/chat")
+else:
+    import httpx
 
-chat = ChatOpenAI(
-            openai_api_base=os.getenv("MODEL_ENDPOINT"),
-            model_name="gpt-4",
-            temperature=0,
-            default_headers = {
-                os.getenv("AZURE_OPENAI_CUSTOM_HEADER"): os.environ.get("OPENAI_API_KEY"),
-            },
-            http_client=httpx.Client(
-                event_hooks={
-                    "request": [update_base_url],
-                }
-                ),
-            )
+    # URL backend and authentication customization
+    # https://github.com/openai/openai-python/issues/547#issuecomment-1795526894
+    def update_base_url(request: httpx.Request) -> None:
+        if os.getenv("AZURE_OPENAI_CUSTOM_BACKEND") is not None:
+            if request.url.path == "/chat/completions":
+                request.url = request.url.copy_with(path=os.getenv("AZURE_OPENAI_CUSTOM_BACKEND"))
 
 
-with get_openai_callback() as cb:
-    results = chat(messages)
-print(cb)
-print(results)
+    chat = ChatOpenAI(
+                openai_api_base=os.getenv("MODEL_ENDPOINT"),
+                model_name="gpt-4",
+                temperature=0,
+                default_headers = {
+                    os.getenv("AZURE_OPENAI_CUSTOM_HEADER"): os.environ.get("OPENAI_API_KEY"),
+                },
+                http_client=httpx.Client(
+                    event_hooks={
+                        "request": [update_base_url],
+                    }
+                    ),
+                )
+
+
+    with get_openai_callback() as cb:
+        results = chat(messages)
+    print(cb)
+    print(results)
