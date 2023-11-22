@@ -13,6 +13,9 @@ import httpx
 
 from dotenv import load_dotenv 
 load_dotenv()
+isDocker = os.path.exists("/.dockerenv")
+if isDocker:
+    os.environ["CHAT_DATA_FOLDER"] = "/"+os.getenv("CHAT_DATA_FOLDER")
 
 from chat_utils import purge_memory, token_counter
 
@@ -20,7 +23,6 @@ from chat_utils import purge_memory, token_counter
 max_total_calls_per_day = int(os.getenv("TOTAL_MODEL_QUOTA"))
 
 # Log-file definition
-isDocker = os.path.exists("/.dockerenv")
 log_path = "/logs" if isDocker else "logs"
 log_file = f"{log_path}/call_log_{{time:YYYY-MM-DD}}.log"
 logger.remove()
