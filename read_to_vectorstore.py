@@ -35,7 +35,7 @@ def convert_files_totext(filenames):
     for filename in filenames:
         # Exctract file type
         filetype = filename.split('.')[-1]
-        print(filename)
+        print("Converting to text: " + filename)
         if filetype != "md":
             text = textract.process(filename)
             text = text.decode("utf-8")

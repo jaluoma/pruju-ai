@@ -4,3 +4,7 @@ __pycache__/
 .env.bak
 .DS_Store
 *.log
+.moodle
+moodle_data
+moodle_data_vdb
+prujuai_moodle
