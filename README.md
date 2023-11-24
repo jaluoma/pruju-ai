@@ -82,6 +82,8 @@ Once the app is running, it will tell you the address where you can find the cha
 
 # Bring your own course materials
 
+## The basics
+
 To get started, create a copy of the `prujuai_resources` directory and give it a name that you like (e.g., `mycourse_resources`) Then modify the .env file so that the app knows where to look for the files (e.g. `CHAT_DATA_FOLDER="mycourse_resources"`). In this new directory, modify the following files to your liking:
 
 - `prompt_template.txt` provides the general system instructions for the chatbot
@@ -104,6 +106,24 @@ The script will read your course materials from a given location (`./course_mate
 
 The default course materials are from an imaginary course called _Primer on Business Analytics with Python_, produced with the help of ChatGPT (GPT-4) for demonstration purposes. The example materials (`course_materials`) include lecture slides, lecture transcripts and Python scripting tutorials.
 
+## Moodle integration
+
+You can integrate the materials with a Moodle instance by specifying `.moodle` file to contain the following things:
+
+```
+COURSE_ID="12345"
+WS_TOKEN="your-token"
+WS_ENDPOINT="https://your-moodle-instance.edu/webservice/rest/server.php"
+WS_STORAGE="moodle_data"
+```
+Running the `moodle.py` script will read files from your course in Moodle and embed them in a FAISS vector store. 
+
+```bash
+(.venv) foo@bar ~$: python3 moodle.py
+```
+
+You can ten copy the data to your course material folder. The script also includes links to the files so it's advisable to add something like this to the system prompt: `Make sure to include hyperlinks to allow easy access to the materials.`
+
 # Project status
 
 The project is currently in a working demo state, with loads of room for improvement. Some possible directions for further development: 
@@ -111,6 +131,7 @@ The project is currently in a working demo state, with loads of room for improve
 - _New features_: Alternative assistance modes (e.g., simple Q&A, prepping for exam, reflective discussions), a user interface for no-code chatbot customization à la OpenAI's GPT Builder.
 - _Technical improvements_: The app has not been tested or optimized for large use volumes.
 - _Support for alternative LLMs_: The app was originally designed to run with OpenAI's ChatGPT, but because the app uses lanchain to make the API calls, it can be integrated with many other LLMs with relative ease.
+- _Integration with Moodle and other platforms_: The Moodle integration is not currently continuous but can be made continuous with relative ease.
 
 # Acknowledgements
 
