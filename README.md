@@ -122,7 +122,7 @@ Running the `moodle.py` script will read files from your course in Moodle and em
 (.venv) foo@bar ~$: python3 moodle.py
 ```
 
-You can ten copy the data to your course material folder. The script also includes links to the files so it's advisable to add something like this to the system prompt: `Make sure to include hyperlinks to allow easy access to the materials.`
+You can then copy the data to your course material folder. The script also includes links to the files so it's advisable to add something like this to the system prompt: `Make sure to include hyperlinks to allow easy access to the materials.`
 
 # Project status
 
