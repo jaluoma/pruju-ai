@@ -12,10 +12,10 @@ The app works with OpenAI's API, Microsoft's Azure OpenAI Service and Ollama. Ol
 
 The instructions are for macOS but should work with Linux and (with small modifications) Windows, too.
 
-Clone the repo, create a virtual environment, and install required dependencies.
+Clone the repo and create a virtual environment for the project. Install required dependencies:
 
 ```bash
-(.venv) foo@bar ~$: pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 ## Create and edit .env
@@ -75,7 +75,7 @@ In the case of Ollama, you need to  install Ollama and run `ollama serve <modeln
 Run:
 
 ```bash
-(.venv) foo@bar ~$: gradio app.py
+gradio app.py
 ```
 
 Once the app is running, it will tell you the address where you can find the chatbot interface.
@@ -108,7 +108,7 @@ The default course materials are from an imaginary course called _Primer on Busi
 
 ## Moodle integration
 
-You can integrate the materials with a Moodle instance by specifying `.moodle` file to contain the following things:
+You can import the materials from a Moodle instance by specifying `.moodle` file to contain the following things:
 
 ```
 COURSE_ID="12345"
@@ -116,13 +116,13 @@ WS_TOKEN="your-token"
 WS_ENDPOINT="https://your-moodle-instance.edu/webservice/rest/server.php"
 WS_STORAGE="moodle_data"
 ```
-Running the `moodle.py` script will read files from your course in Moodle and embed them in a FAISS vector store. 
+Running the `moodle.py` script will read files from your course in Moodle and embed them in a FAISS vector store in a directory specified in the `WS_STORAGE` environment variable, followed by "`_vdb`" (e.g., `moode_data_vdb`). 
 
 ```bash
-(.venv) foo@bar ~$: python3 moodle.py
+python3 moodle.py
 ```
 
-You can then copy the data to your course material folder. The script also includes links to the files so it's advisable to add something like this to the system prompt: `Make sure to include hyperlinks to allow easy access to the materials.`
+You can then copy the `index.faiss` and `index.pkl` files to your course material folder (`CHAT_DATA_FOLDER/faiss_index`). The script also includes links to the files so it's advisable to add something like this to the system prompt: `Make sure to include hyperlinks to allow easy access to the materials.`
 
 # Project status
 
@@ -131,7 +131,7 @@ The project is currently in a working demo state, with loads of room for improve
 - _New features_: Alternative assistance modes (e.g., simple Q&A, prepping for exam, reflective discussions), a user interface for no-code chatbot customization à la OpenAI's GPT Builder.
 - _Technical improvements_: The app has not been tested or optimized for large use volumes.
 - _Support for alternative LLMs_: The app was originally designed to run with OpenAI's ChatGPT, but because the app uses lanchain to make the API calls, it can be integrated with many other LLMs with relative ease.
-- _Integration with Moodle and other platforms_: The Moodle integration is not currently continuous but can be made continuous with relative ease.
+- _Integration with Moodle and other platforms_: For example, using Google Drive, OneDrive, Dropbox for files would be convenient. The vector store should be updated automatically. 
 
 # Acknowledgements
 
