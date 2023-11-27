@@ -124,7 +124,7 @@ Running the `moodle.py` script will read files from your course in Moodle and em
 python3 moodle.py
 ```
 
-You can then copy the `index.faiss` and `index.pkl` files to your course material folder (`CHAT_DATA_FOLDER/faiss_index`). The script also includes links to the files so it's advisable to add something like this to the system prompt: `Make sure to include hyperlinks to allow easy access to the materials.`
+You can then copy the `index.faiss` and `index.pkl` files to your course material folder (`CHAT_DATA_FOLDER/faiss_index`). The script also includes Moodle links to the text chucks consumed by the vector store, so it's advisable to add something like this to the system prompt: `Make sure to include hyperlinks to allow easy access to the materials.` This allows the user to click on the links and see the contents of the original files on Moodle. Make sure that the access token is associated with the appropriate permissions on the Moodle end. 
 
 # Project status
 
