@@ -1,3 +1,5 @@
+# Script for initializing openai and azure chat models with langchain 
+
 import os
 from langchain.chat_models import AzureChatOpenAI, ChatOpenAI
 from langchain.schema import AIMessage, SystemMessage, HumanMessage
