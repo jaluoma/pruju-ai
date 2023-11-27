@@ -8,6 +8,8 @@ The app can be configured to work with the teacher's own materials without any c
 
 The app works with OpenAI's API, Microsoft's Azure OpenAI Service and Ollama. Ollama supports a wider range of open-source models (e.g., Mistral 7B, Llama 2). Only Mistral 7B has been tested.
 
+_Pruju is Finnish university slang for a study handout. According to the (Finnish) [Urban Dictionary](https://urbaanisanakirja.com/word/pruju/), prujus "can range in quality from a good book [...] to a pile of cryptic lecture slides that make no sense whatsoever."_
+
 # Getting started
 
 The instructions are for macOS but should work with Linux and (with small modifications) Windows, too.
