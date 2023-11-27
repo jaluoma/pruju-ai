@@ -35,6 +35,57 @@ def ws_fn_call(endpoint=os.getenv("WS_ENDPOINT"), courseid=os.getenv("COURSE_ID"
         return response
     else:
         raise Exception(f"Request failed with status code: {response.status_code}: {response.text}")
+    
+def ws_return_announcements(endpoint=os.getenv("WS_ENDPOINT"), courseid=os.getenv("COURSE_ID"), token=os.getenv("WS_TOKEN")):
+    
+    posts = pd.DataFrame(columns=['Subject', 'URL', 'Message'])
+    
+    fn = "mod_forum_get_forums_by_courses"
+
+    data = {
+        "courseids[0]": courseid, 
+        "wstoken": token,
+        "wsfunction": fn,
+        "moodlewsrestformat": "json",
+    }
+
+    forumid = 0
+    forums = requests.post(endpoint,data).json()
+    for forum in forums:
+        if (forum.get('type')=="news"):
+            forumid=forum.get('id')
+
+    if forumid==0:
+        print("Unable to figure out the forumid. Exiting")
+        exit(1)
+
+    fn = "mod_forum_get_forum_discussions"
+
+    data = {
+        "forumid": forumid, 
+        "wstoken": token,
+        "wsfunction": fn,
+        "moodlewsrestformat": "json",
+    }
+
+    response = requests.post(endpoint,data).json()
+    discussions = response.get('discussions',[])
+    for discussion in discussions:
+        fn = "mod_forum_get_discussion_posts"
+        data = {
+            "discussionid": discussion.get('discussion'), 
+            "wstoken": token,
+            "wsfunction": fn,
+            "moodlewsrestformat": "json",
+        }
+        discussion_posts = requests.post(endpoint,data).json().get('posts',[])
+        for post in discussion_posts:
+            subject=post['subject']
+            message=post['message']
+            url=post['urls']['view']
+            posts.loc[len(posts)]=[subject,url,message]
+
+    return(posts)
 
 def ws_create_file_list(response: requests.Response, token=os.getenv("WS_TOKEN")):
     """Create file list from Moodle Webservice core_course_get_contents response.
@@ -91,6 +142,7 @@ if __name__=="__main__":
     resp=ws_fn_call()
     df=ws_create_file_list(resp)
     ws_files_todisk(df)
+    posts=ws_return_announcements()
 
     filenames = []
     for file in df['Filename']:
@@ -104,6 +156,12 @@ if __name__=="__main__":
     material_headings = material_headings.tolist()
 
     chunk_df = create_chunck_dataframe(material_headings, texts)
+    
+    post_headings = "Announcements->" + posts['Subject'] + ", " + posts['URL']
+    post_chunk_df = create_chunck_dataframe(post_headings,posts['Message'])
+
+    chunk_df = pd.concat([chunk_df,post_chunk_df],ignore_index=True)
+
     vector_store = create_vector_store(chunk_df,store_type="faiss")
 
     vector_store_dir = os.getenv("WS_STORAGE")+"_vdb"
