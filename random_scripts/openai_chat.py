@@ -1,3 +1,5 @@
+# Script for trying out streaming with langchain
+
 import os
 
 from langchain.schema import AIMessage, SystemMessage, HumanMessage

@@ -1,0 +1,1 @@
+This directory contains scripts that can be useful for seeing how specific parts of the software work and/or scripts that are not yet part of the app itself (but could be).
