@@ -57,7 +57,7 @@ def ws_return_announcements(endpoint=os.getenv("WS_ENDPOINT"), courseid=os.geten
 
     if forumid==0:
         print("Unable to figure out the forumid. Exiting")
-        exit(1)
+        return None
 
     fn = "mod_forum_get_forum_discussions"
 
@@ -157,10 +157,11 @@ if __name__=="__main__":
 
     chunk_df = create_chunck_dataframe(material_headings, texts)
     
-    post_headings = "Announcements->" + posts['Subject'] + ", " + posts['URL']
-    post_chunk_df = create_chunck_dataframe(post_headings,posts['Message'])
+    if posts is not None:
+        post_headings = "Announcements->" + posts['Subject'] + ", " + posts['URL']
+        post_chunk_df = create_chunck_dataframe(post_headings,posts['Message'])
 
-    chunk_df = pd.concat([chunk_df,post_chunk_df],ignore_index=True)
+        chunk_df = pd.concat([chunk_df,post_chunk_df],ignore_index=True)
 
     vector_store = create_vector_store(chunk_df,store_type="faiss")
 
