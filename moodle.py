@@ -38,7 +38,7 @@ def ws_fn_call(endpoint=os.getenv("WS_ENDPOINT"), courseid=os.getenv("COURSE_ID"
     
 def ws_return_announcements(endpoint=os.getenv("WS_ENDPOINT"), courseid=os.getenv("COURSE_ID"), token=os.getenv("WS_TOKEN")):
     
-    posts = pd.DataFrame(columns=['Subject', 'URL', 'Message'])
+    posts = pd.DataFrame(columns=['Subject', 'URL', 'Message', 'Modified'])
     
     fn = "mod_forum_get_forums_by_courses"
 
@@ -83,7 +83,8 @@ def ws_return_announcements(endpoint=os.getenv("WS_ENDPOINT"), courseid=os.geten
             subject=post['subject']
             message=post['message']
             url=post['urls']['view']
-            posts.loc[len(posts)]=[subject,url,message]
+            modified=post['timemodified']
+            posts.loc[len(posts)]=[subject,url,message, modified]
 
     return(posts)
 
@@ -99,7 +100,7 @@ def ws_create_file_list(response: requests.Response, token=os.getenv("WS_TOKEN")
         pandas DataFrame
     """
     # Initialize dataframe for metadata
-    file_data = pd.DataFrame(columns=['Filename','User URL','Download URL'])
+    file_data = pd.DataFrame(columns=['Filename','User URL','Download URL', 'Modified'])
 
     response=response.json()
     for section in response:
@@ -109,7 +110,7 @@ def ws_create_file_list(response: requests.Response, token=os.getenv("WS_TOKEN")
                 module_url = module.get('url','')          
                 for content in module.get('contents', []):
                     item_name = module_name+"->"+content.get('filename','')
-                    file_data.loc[len(file_data)] = [item_name,module_url,content.get('fileurl', '')+"&token="+token]
+                    file_data.loc[len(file_data)] = [item_name,module_url,content.get('fileurl', '')+"&token="+token, content.get('timemodified', '')]
 
     return file_data
 
@@ -156,11 +157,12 @@ if __name__=="__main__":
     material_headings = material_headings.tolist()
 
     chunk_df = create_chunck_dataframe(material_headings, texts)
+    chunk_df['Modified'] = df['Modified']
     
     if posts is not None:
         post_headings = "Announcements->" + posts['Subject'] + ", " + posts['URL']
         post_chunk_df = create_chunck_dataframe(post_headings,posts['Message'])
-
+        post_chunk_df['Modified'] = posts['Modified']
         chunk_df = pd.concat([chunk_df,post_chunk_df],ignore_index=True)
 
     vector_store = create_vector_store(chunk_df,store_type="faiss")

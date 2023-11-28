@@ -55,7 +55,8 @@ for discussion in discussions:
         subject=post['subject']
         message=post['message']
         url=post['urls']['view']
-        posts.append([subject,message,url])
+        modified=post['timemodified']
+        posts.append([subject,message,url, modified])
 
 print(posts)
 
