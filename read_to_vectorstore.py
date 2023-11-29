@@ -65,7 +65,7 @@ def create_chunck_dataframe(material_headings, texts):
     df['Text_Splitted_w_Headings'] = df.apply(lambda row: ["Source: " + row['Heading'] + '\n' + chunk for chunk in row['Text_Splitted']], axis=1)
     return df
 
-def create_vector_store(df,store_type="faiss",metadatas=True):
+def create_vector_store(df,store_type="faiss",metadatas=False):
     master_chunk = []
     master_metadata=[]
     for i, row in df.iterrows():
@@ -74,9 +74,6 @@ def create_vector_store(df,store_type="faiss",metadatas=True):
             for text_in_row in row['Text_Splitted_w_Headings']:
                 master_metadata.append(row[['Heading','Modified']].to_dict())
     # Create vector store
-    print("texts: "+str(len(master_chunk)))
-    print("metadata: "+str(len(master_metadata)))
-    print("metadatas: "+str(metadatas))
     embeddings = HuggingFaceInstructEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
     if store_type=="faiss":
         vector_store = FAISS.from_texts(texts=master_chunk, embedding=embeddings,metadatas=master_metadata if metadatas else None)
