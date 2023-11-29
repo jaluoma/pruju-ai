@@ -10,3 +10,4 @@ openai==1.2.3
 loguru==0.7.2
 textract==1.6.5
 pandas==2.1.3
+qdrant-client==1.6.9
