@@ -65,7 +65,12 @@ def create_chunck_dataframe(material_headings, texts):
     df['Text_Splitted_w_Headings'] = df.apply(lambda row: ["Source: " + row['Heading'] + '\n' + chunk for chunk in row['Text_Splitted']], axis=1)
     return df
 
-def create_vector_store(df,store_type="faiss",metadatas=False):
+def create_vector_store(df,
+                        store_type="faiss",
+                        metadatas=False,
+                        vector_store_endpoint=None,
+                        vector_store_api_key=None,
+                        vector_store_collection_name=None):
     master_chunk = []
     master_metadata=[]
     for i, row in df.iterrows():
@@ -77,6 +82,18 @@ def create_vector_store(df,store_type="faiss",metadatas=False):
     embeddings = HuggingFaceInstructEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
     if store_type=="faiss":
         vector_store = FAISS.from_texts(texts=master_chunk, embedding=embeddings,metadatas=master_metadata if metadatas else None)
+    elif store_type=="qdrant":
+        from langchain.vectorstores import Qdrant
+        vector_store = Qdrant.from_texts(
+            texts=master_chunk,
+            embedding=embeddings,
+            metadatas=master_metadata if metadatas else None,
+            url=vector_store_endpoint,
+            prefer_grpc=True,
+            api_key=vector_store_api_key,
+            collection_name=vector_store_collection_name,
+            force_recreate=True
+        )
     else:
         print("Unsupported vector store detected. Returning None.")
         return None
