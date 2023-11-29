@@ -165,7 +165,7 @@ if __name__=="__main__":
         post_chunk_df['Modified'] = posts['Modified']
         chunk_df = pd.concat([chunk_df,post_chunk_df],ignore_index=True)
 
-    vector_store = create_vector_store(chunk_df,store_type="faiss")
+    vector_store = create_vector_store(chunk_df,store_type="faiss", metadatas=True)
 
     vector_store_dir = os.getenv("WS_STORAGE")+"_vdb"
     if os.path.isdir(vector_store_dir)==False:
