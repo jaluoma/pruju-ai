@@ -165,13 +165,21 @@ if __name__=="__main__":
         post_chunk_df['Modified'] = posts['Modified']
         chunk_df = pd.concat([chunk_df,post_chunk_df],ignore_index=True)
 
-    vector_store = create_vector_store(chunk_df,store_type="faiss", metadatas=True)
+    vector_store_type=os.getenv("VECTOR_STORE")
+    if vector_store_type=="qdrant":
+        vector_store=create_vector_store(chunk_df,
+                                store_type="qdrant",
+                                metadatas=True,
+                                vector_store_endpoint=os.getenv("VECTOR_STORE_ENDPOINT"),
+                                vector_store_api_key=os.getenv("VECTOR_STORE_API_KEY"), 
+                                vector_store_collection_name="my_prujuai")
+    else:
+        vector_store = create_vector_store(chunk_df,store_type="faiss", metadatas=True)
+        vector_store_dir = os.getenv("WS_STORAGE")+"_vdb"
+        if os.path.isdir(vector_store_dir)==False:
+            os.mkdir(vector_store_dir)    
 
-    vector_store_dir = os.getenv("WS_STORAGE")+"_vdb"
-    if os.path.isdir(vector_store_dir)==False:
-        os.mkdir(vector_store_dir)    
-
-    vector_store.save_local(vector_store_dir)
+        vector_store.save_local(vector_store_dir)
 
     print("Test querying the vector store.")
     try:
