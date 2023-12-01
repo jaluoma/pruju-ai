@@ -1,0 +1,8 @@
+COURSE_ID="your-course-id"
+WS_TOKEN="moodle-webservice-api-token"
+WS_ENDPOINT="https://your-moodle-instance.edu/webservice/rest/server.php"
+WS_STORAGE="moodle_data" # directory to store files from Moodle
+# VECTOR_STORE="qdrant" # If you use qdrant
+# VECTOR_STORE_COLLECTION="my_collection" # qdrant collection name
+# VECTOR_STORE_ENDPOINT="localhost" #"localhost" or hosted service endpoint
+# VECTOR_STORE_API_KEY="your-secret" # If you use qdrant's hosted service

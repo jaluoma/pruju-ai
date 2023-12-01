@@ -4,7 +4,7 @@ Pruju AI is a teaching assistant that allows students to interact with the teach
 
 The project exists to make creating virtual teaching assistants as easy as possible. From a pedagogical point of view, it is essential to be able to control the knowledge base of the assistant as well as the types of answers that the assistant provides to the student's questions.
 
-The app can be configured to work with the teacher's own materials without any coding. You do need to modify some text files and run one Python script to make it your own. You can also use the code as a starting point for more sophisticated and customized setups.
+The app can be configured to work with the teacher's own materials without any coding. You do need to modify some text files and run one Python script to make it your own. You can also use the code as a starting point for more sophisticated and customized setups. If your course uses Moodle, you can now import data from your own course!
 
 The app works with OpenAI's API, Microsoft's Azure OpenAI Service and Ollama. Ollama supports a wider range of open-source models (e.g., Mistral 7B, Llama 2). Only Mistral 7B has been tested.
 
@@ -124,7 +124,29 @@ Running the `moodle.py` script will read files from your course in Moodle and em
 python3 moodle.py
 ```
 
-You can then copy the `index.faiss` and `index.pkl` files to your course material folder (`CHAT_DATA_FOLDER/faiss_index`). The script also includes Moodle links to the text chucks consumed by the vector store, so it's advisable to add something like this to the system prompt: `Make sure to include hyperlinks to allow easy access to the materials.` This allows the user to click on the links and see the contents of the original files on Moodle. Make sure that the access token is associated with the appropriate permissions on the Moodle end. 
+You can then copy the `index.faiss` and `index.pkl` files to your course material folder (`CHAT_DATA_FOLDER/faiss_index`). The script also includes Moodle links to the text chucks consumed by the vector store, so it's advisable to add something like this to the system prompt: `Make sure to include hyperlinks to allow easy access to the materials.` This allows the user to click on the links and see the contents of the original files on Moodle. Make sure that the access token is associated with the appropriate permissions on the Moodle end.
+
+## Qdrant vector database
+
+You can also use a [qdrant](https://qdrant.tech/) vector database, run locally in a container or using the hosted service. You can specify the app to use your qdrant collection by modifying .env as follows:
+
+```
+VECTOR_STORE="qdrant" # If you use qdrant
+VECTOR_STORE_COLLECTION="my_collection" # qdrant collection name
+VECTOR_STORE_ENDPOINT="localhost" #"localhost" or hosted service endpoint
+VECTOR_STORE_API_KEY="your-secret" # If you use qdrant's hosted service
+```
+
+If you're importing your course materials from Moodle using `moodle.py`, simply add the following to your `.moodle` file to create a qdrant collection for your app.
+
+```
+VECTOR_STORE="qdrant" # If you use qdrant
+VECTOR_STORE_COLLECTION="my_collection" # qdrant collection name
+VECTOR_STORE_ENDPOINT="localhost" #"localhost" or hosted service endpoint
+VECTOR_STORE_API_KEY="your-secret" # If you use qdrant's hosted service
+```
+
+You can run the Moodle import script periodically to keep the chatbot's knowledge base up-tp-date.
 
 # Project status
 
@@ -133,7 +155,7 @@ The project is currently in a working demo state, with loads of room for improve
 - _New features_: Alternative assistance modes (e.g., simple Q&A, prepping for exam, reflective discussions), a user interface for no-code chatbot customization à la OpenAI's GPT Builder.
 - _Technical improvements_: The app has not been tested or optimized for large use volumes.
 - _Support for alternative LLMs_: The app was originally designed to run with OpenAI's ChatGPT, but because the app uses lanchain to make the API calls, it can be integrated with many other LLMs with relative ease.
-- _Integration with Moodle and other platforms_: For example, using Google Drive, OneDrive, Dropbox for files would be convenient. The vector store should be updated automatically. 
+- _(Better) integration with Moodle and other platforms_: For example, using Google Drive, OneDrive, Dropbox for files would be convenient.
 
 # Acknowledgements
 
