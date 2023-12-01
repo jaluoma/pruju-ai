@@ -139,16 +139,7 @@ VECTOR_STORE_ENDPOINT="localhost" #"localhost" or hosted service endpoint
 VECTOR_STORE_API_KEY="your-secret" # If you use qdrant's hosted service
 ```
 
-If you're importing your course materials from Moodle using `moodle.py`, simply add the following to your `.moodle` file to create a qdrant collection for your app.
-
-```
-VECTOR_STORE="qdrant" # If you use qdrant
-VECTOR_STORE_COLLECTION="my_collection" # qdrant collection name
-VECTOR_STORE_ENDPOINT="localhost" #"localhost" or hosted service endpoint
-VECTOR_STORE_API_KEY="your-secret" # If you use qdrant's hosted service
-```
-
-You can run the Moodle import script periodically to keep the chatbot's knowledge base up-tp-date.
+If you're importing your course materials from Moodle using `moodle.py`, add the above lines to your `.moodle` too. You can consider running the Moodle import script periodically to keep the chatbot's knowledge base up-to-date. Again, be mindful of premissions on the Moodle end.
 
 # Project status
 
