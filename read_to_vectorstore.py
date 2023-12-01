@@ -92,7 +92,7 @@ def create_vector_store(df,
             prefer_grpc=True,
             api_key=vector_store_api_key,
             collection_name=vector_store_collection_name,
-            force_recreate=True
+            force_recreate=True,
         )
     else:
         print("Unsupported vector store detected. Returning None.")

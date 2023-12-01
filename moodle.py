@@ -56,7 +56,7 @@ def ws_return_announcements(endpoint=os.getenv("WS_ENDPOINT"), courseid=os.geten
             forumid=forum.get('id')
 
     if forumid==0:
-        print("Unable to figure out the forumid. Exiting")
+        print("Unable to find forums. Returning None.")
         return None
 
     fn = "mod_forum_get_forum_discussions"
@@ -159,6 +159,7 @@ if __name__=="__main__":
     chunk_df = create_chunck_dataframe(material_headings, texts)
     chunk_df['Modified'] = df['Modified']
     
+    # print(posts)
     if posts is not None:
         post_headings = "Announcements->" + posts['Subject'] + ", " + posts['URL']
         post_chunk_df = create_chunck_dataframe(post_headings,posts['Message'])
@@ -172,7 +173,7 @@ if __name__=="__main__":
                                 metadatas=True,
                                 vector_store_endpoint=os.getenv("VECTOR_STORE_ENDPOINT"),
                                 vector_store_api_key=os.getenv("VECTOR_STORE_API_KEY"), 
-                                vector_store_collection_name="my_prujuai")
+                                vector_store_collection_name=os.getenv("VECTOR_STORE_COLLECTION"))
     else:
         vector_store = create_vector_store(chunk_df,store_type="faiss", metadatas=True)
         vector_store_dir = os.getenv("WS_STORAGE")+"_vdb"
