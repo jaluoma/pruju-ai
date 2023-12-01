@@ -126,7 +126,7 @@ Running the `moodle.py` script will download files (from _File_ and _Folder_ res
 python3 moodle.py
 ```
 
-You can then copy the `index.faiss` and `index.pkl` files to your course material folder (`CHAT_DATA_FOLDER/faiss_index`). The script also includes Moodle links to the text chucks consumed by the vector store, so it's advisable to add something like this to the system prompt: `Make sure to include hyperlinks to allow easy access to the materials.` This allows the user to click on the links and see the contents of the original concent on Moodle. Make sure that the access token is associated with the appropriate permissions on the Moodle end.
+You can then copy the `index.faiss` and `index.pkl` files to your course material folder (`CHAT_DATA_FOLDER/faiss_index`). The script also includes Moodle links to the text chucks consumed by the vector store, so it's advisable to add something like this to the system prompt: `Make sure to include hyperlinks to allow easy access to the materials.` This allows the user to easily navigate to see the original content on Moodle. Make sure that the access token is associated with the appropriate permissions on the Moodle end.
 
 ## Qdrant vector database
 
@@ -139,7 +139,7 @@ VECTOR_STORE_ENDPOINT="localhost" #"localhost" or hosted service endpoint
 VECTOR_STORE_API_KEY="your-secret" # If you use qdrant's hosted service
 ```
 
-If you're importing your course materials from Moodle using `moodle.py`, add the above lines to your `.moodle` too. You can consider running the Moodle import script periodically to keep the chatbot's knowledge base up-to-date. Again, be mindful of premissions on the Moodle end.
+If you're importing your course materials from Moodle using `moodle.py`, add the above lines to your `.moodle` too. You can consider running the Moodle import script periodically to keep the chatbot's knowledge base up-to-date. Again, _please be mindful of premissions on the Moodle end_.
 
 # Project status
 
