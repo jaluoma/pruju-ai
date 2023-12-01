@@ -118,13 +118,13 @@ WS_TOKEN="your-token"
 WS_ENDPOINT="https://your-moodle-instance.edu/webservice/rest/server.php"
 WS_STORAGE="moodle_data"
 ```
-Running the `moodle.py` script will read files from your course in Moodle and embed them in a FAISS vector store in a directory specified in the `WS_STORAGE` environment variable, followed by "`_vdb`" (e.g., `moode_data_vdb`). 
+Running the `moodle.py` script will read files (from File and Folder resources) from your course in Moodle and embed them in a FAISS vector store in a directory specified in the `WS_STORAGE` environment variable, followed by "`_vdb`" (e.g., `moode_data_vdb`). The script will also read posts to the _Announcements_ forum.
 
 ```bash
 python3 moodle.py
 ```
 
-You can then copy the `index.faiss` and `index.pkl` files to your course material folder (`CHAT_DATA_FOLDER/faiss_index`). The script also includes Moodle links to the text chucks consumed by the vector store, so it's advisable to add something like this to the system prompt: `Make sure to include hyperlinks to allow easy access to the materials.` This allows the user to click on the links and see the contents of the original files on Moodle. Make sure that the access token is associated with the appropriate permissions on the Moodle end.
+You can then copy the `index.faiss` and `index.pkl` files to your course material folder (`CHAT_DATA_FOLDER/faiss_index`). The script also includes Moodle links to the text chucks consumed by the vector store, so it's advisable to add something like this to the system prompt: `Make sure to include hyperlinks to allow easy access to the materials.` This allows the user to click on the links and see the contents of the original files on Moodle. Make sure that the access token is associated with the appropriate permissions on the Moodle end. _Please think carefully what you want your app to have access to!_
 
 ## Qdrant vector database
 
