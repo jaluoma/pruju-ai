@@ -165,7 +165,7 @@ print("System instruction template:\n" + system_instruction_template)
 
 # Main chat caller function
 
-def query_gpt_chat(query: str, history):
+def query_gpt_chat(query: str, history, prompt_logging_enabled: bool):
     max_tokens=int(os.getenv("MAX_PROMPT_TOKENS"))
     # Check quota status and update model accordingly
     daily_calls_sum = check_quota_status()
@@ -213,11 +213,18 @@ def query_gpt_chat(query: str, history):
         print(f"Total tokens: {total_tokens}")
 
         # Log statistics
+        results_content = results.content
         query_statistics = [token_count, result_tokens, total_tokens, 1]
-        query_statistics = default_model+","+",".join(str(i) for i in query_statistics)+ " " + str(daily_calls_sum+1) 
+        if prompt_logging_enabled == True:
+            text1 = query.replace("\n", "\\n")
+            text2 = results_content.replace("\n", "\\n")
+            logged_prompt = ";".join([text1,text2])
+        else:
+            logged_prompt = "DISABLED"
+        query_statistics = default_model+","+logged_prompt+","+",".join(str(i) for i in query_statistics)+ " " + str(daily_calls_sum+1) 
         logger.info(query_statistics)
         
-        results_content = results.content
+        
     else:
         # debug mode:
         results_content = context

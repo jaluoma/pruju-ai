@@ -8,13 +8,13 @@ import os
 
 from brand_theming import customtheme
 
-def call_chat(query, chat_history):
+def call_chat(query, chat_history, prompt_logging_enabled):
     # unpack history
     chat_history_unpacked = []
     for x in chat_history:
         for y in x:
             chat_history_unpacked.append(y)
-    chat_engine, answer = query_gpt_chat(query,chat_history_unpacked)
+    chat_engine, answer = query_gpt_chat(query,chat_history_unpacked, prompt_logging_enabled)
     chat_history.append((query, answer))
     return "", chat_history
 
@@ -38,11 +38,11 @@ with gr.Blocks(theme=customtheme,
                                 container=False,autofocus=True)
             clear = gr.ClearButton([query, chatbot],value="🗑️",scale=1,min_width=10,variant='secondary')
             submit_button = gr.Button(value="Go!",scale=6,variant="primary",min_width=10)
-
+    prompt_logging_enabled=gr.Checkbox(value=False,label="Allow prompt logging.")
     gr.Markdown(value=chat_footer)  
     gr.Examples(examples=examples,inputs=query)
-    query.submit(fn=call_chat, inputs=[query, chatbot], outputs=[query, chatbot])
-    submit_button.click(fn=call_chat, inputs=[query, chatbot], outputs=[query, chatbot])
+    query.submit(fn=call_chat, inputs=[query, chatbot, prompt_logging_enabled], outputs=[query, chatbot])
+    submit_button.click(fn=call_chat, inputs=[query, chatbot, prompt_logging_enabled], outputs=[query, chatbot])
 
 if __name__ == "__main__":
     print("Launching Demo\n")
