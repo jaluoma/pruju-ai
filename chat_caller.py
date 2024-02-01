@@ -29,7 +29,6 @@ logger.remove()
 logger.add(log_file, rotation="1 day", format="{time} {message}", level="INFO")
 
 # Initialize chat model
-
 llm_provider = os.getenv("LLM_PROVIDER")
 print("Using LLM-provider: " + llm_provider)
 
@@ -166,7 +165,7 @@ print("System instruction template:\n" + system_instruction_template)
 
 # Main chat caller function
 
-def query_gpt_chat(query: str, history, prompt_logging_enabled: bool):
+def query_gpt_chat(query: str, history, prompt_logging_enabled: bool, conversation_id: str):
     max_tokens=int(os.getenv("MAX_PROMPT_TOKENS"))
     # Check quota status and update model accordingly
     daily_calls_sum = check_quota_status()
@@ -222,7 +221,7 @@ def query_gpt_chat(query: str, history, prompt_logging_enabled: bool):
             logged_prompt = ";".join([text1,text2])
         else:
             logged_prompt = "DISABLED"
-        query_statistics = default_model+","+logged_prompt+","+",".join(str(i) for i in query_statistics)+ " " + str(daily_calls_sum+1) 
+        query_statistics = default_model+","+conversation_id+","+logged_prompt+","+",".join(str(i) for i in query_statistics)+ " " + str(daily_calls_sum+1) 
         logger.info(query_statistics)
         
         
@@ -231,3 +230,12 @@ def query_gpt_chat(query: str, history, prompt_logging_enabled: bool):
         results_content = context
 
     return current_model, results_content
+
+def write_log_removal_request(conversation_id):
+    daily_calls_sum = check_quota_status()
+    logger.info(default_model+
+                ","+conversation_id+
+                ","+"PROMPT REMOVAL REQUEST"+
+                ","+
+                ",".join(str(i) for i in [0, 0, 0, 0])+ " " + str(daily_calls_sum))
+    return "Your request has been logged. Thank you for your patience. You can safely close this window or continue chatting. Please remember to untick the prompt logging checkbox if you do not want us to log prompts."
