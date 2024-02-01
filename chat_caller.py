@@ -22,8 +22,9 @@ from chat_utils import purge_memory, token_counter
 max_total_calls_per_day = int(os.getenv("TOTAL_MODEL_QUOTA"))
 
 # Log-file definition
+root_path = os.getenv("ROOT_PATH")
 log_path = "/logs" if isDocker else "logs"
-log_file = f"{log_path}/call_log_{{time:YYYY-MM-DD}}.log"
+log_file = f"{log_path}/{root_path}_call_log_{{time:YYYY-MM-DD}}.log"
 logger.remove()
 logger.add(log_file, rotation="1 day", format="{time} {message}", level="INFO")
 
@@ -109,7 +110,7 @@ def get_daily_calls(log_file):
         
 def check_quota_status():
     try:
-        daily_calls_sum = get_daily_calls(f"{log_path}/call_log_{datetime.now().strftime('%Y-%m-%d')}.log")
+        daily_calls_sum = get_daily_calls(f"{log_path}/{root_path}_call_log_{datetime.now().strftime('%Y-%m-%d')}.log")
     except FileNotFoundError:
         daily_calls_sum = 0
         logger.remove()
