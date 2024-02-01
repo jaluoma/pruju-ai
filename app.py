@@ -38,7 +38,13 @@ with gr.Blocks(theme=customtheme,
                                 container=False,autofocus=True)
             clear = gr.ClearButton([query, chatbot],value="🗑️",scale=1,min_width=10,variant='secondary')
             submit_button = gr.Button(value="Go!",scale=6,variant="primary",min_width=10)
-    prompt_logging_enabled=gr.Checkbox(value=False,label="Allow prompt logging.")
+    # Read boolean value from .env file, ENABLE_LOGGING_PROMPTS
+    enable_logging_prompts = os.getenv("ENABLE_LOGGING_PROMPTS")
+    if enable_logging_prompts is not None:
+        enable_logging_prompts = True if int(os.getenv("ENABLE_LOGGING_PROMPTS"))==1 else False
+    prompt_logging_enabled=gr.Checkbox(value=False,
+                                       label="Allow prompt logging.",
+                                       visible=enable_logging_prompts,)
     gr.Markdown(value=chat_footer)  
     gr.Examples(examples=examples,inputs=query)
     query.submit(fn=call_chat, inputs=[query, chatbot, prompt_logging_enabled], outputs=[query, chatbot])
