@@ -1,3 +1,5 @@
+# Script to process prompt redaction requests in a given folder.
+
 import argparse
 import os
 import datetime
@@ -25,9 +27,6 @@ def main():
                 file_path = os.path.join(root, file)
                 print(f"Processing {file_path}...")
                 prompt_redaction_from_file(file_path, args.destroy_original)    
-            
-            #prompt_redaction_from_file(os.path.join(root, file), args.destroy_original)
-
 
 if __name__ == "__main__":
     parser=argparse.ArgumentParser(description="Process prompt redaction requests in a given folder.")
