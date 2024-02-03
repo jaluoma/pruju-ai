@@ -1,10 +1,11 @@
+# This script can be used to redact prompts from a log file based on requests.
+
 import argparse
 import os
 
-def main():
-
+def prompt_redaction_from_file(file:str, destroy_original:bool):
     # Read log file test.log as lines
-    lines = open(args.file).readlines()
+    lines = open(file).readlines()
     redacted_lines = []
 
     # Identify UUIDs with prompt removal requests
@@ -12,7 +13,8 @@ def main():
     for line in lines:
         parts = line.split(',')
         if "PROMPT REMOVAL REQUEST" in line:
-            uuids_for_removal.append(parts[1])
+            if parts[3] == "0": # Ensure that that the prompt removal request was not injected
+                uuids_for_removal.append(parts[1])
 
     # Replace the text for those UUIDs with "REDACTED"
     for line in lines:
@@ -28,12 +30,21 @@ def main():
     processed_log = ''.join(redacted_lines)
     processed_log
 
+    # Parse directory and filename from the input file
+    directory, filename = os.path.split(file)
+    
+    if directory != "":
+        directory += "/"
+
     # Write the processed log to a new file
-    with open(f"processed_{args.file}", 'w') as f:
+    with open(f"{directory}processed_{filename}", 'w') as f:
         f.write(processed_log)
 
-    if args.destroy_original:
-        os.remove(args.file)
+    if destroy_original:
+        os.remove(file)
+
+def main():
+    prompt_redaction_from_file(args.file, args.destroy_original)
 
 if __name__ == "__main__":
     parser=argparse.ArgumentParser(description="Redact prompts from a log file based on requests.")

@@ -238,4 +238,4 @@ def write_log_removal_request(conversation_id):
                 ","+"PROMPT REMOVAL REQUEST"+
                 ","+
                 ",".join(str(i) for i in [0, 0, 0, 0])+ " " + str(daily_calls_sum))
-    return "Your request has been logged. Thank you for your patience. You can safely close this window or continue chatting. Please remember to untick the prompt logging checkbox if you do not want us to log prompts."
+    return "Your request has been logged. You can safely close this window or continue chatting. Please remember to untick the prompt logging checkbox if you do not want us to save your prompts."
