@@ -141,6 +141,7 @@ def ws_files_todisk(df: pd.DataFrame, save_location=os.getenv("WS_STORAGE")):
 
 if __name__=="__main__":
     parser=argparse.ArgumentParser(description="Ingest a Moodle course into a vector store.")
+    parser.add_argument('-p','--posts',action='store_true',help="Process forum posts",required=False, default=False)
     parser.add_argument('-f','--file',help="Dot file that contains the configuration",required=False, default=".moodle")
     dotfile = parser.parse_args().file
     print("Dot file: " + dotfile)
@@ -148,7 +149,12 @@ if __name__=="__main__":
     resp=ws_fn_call(endpoint=os.getenv("WS_ENDPOINT"), courseid=os.getenv("COURSE_ID"), token=os.getenv("WS_TOKEN"), fn="core_course_get_contents")
     df=ws_create_file_list(resp, token=os.getenv("WS_TOKEN"))
     ws_files_todisk(df, save_location=os.getenv("WS_STORAGE"))
-    posts=ws_return_announcements(endpoint=os.getenv("WS_ENDPOINT"), courseid=os.getenv("COURSE_ID"), token=os.getenv("WS_TOKEN"))
+    if parser.parse_args().posts:
+        posts=ws_return_announcements(endpoint=os.getenv("WS_ENDPOINT"), courseid=os.getenv("COURSE_ID"), token=os.getenv("WS_TOKEN"))
+        if len(posts)==0:
+            posts=None
+    else:
+        posts=None
 
     filenames = []
     for file in df['Filename']:
