@@ -67,7 +67,8 @@ with gr.Blocks(theme=customtheme,
                          variant="secondary",size="sm")
     query.submit(fn=call_chat, inputs=[query, chatbot, prompt_logging_enabled, conversation_id], outputs=[query, chatbot, conversation_id])
     submit_button.click(fn=call_chat, inputs=[query, chatbot, prompt_logging_enabled, conversation_id], outputs=[query, chatbot, conversation_id])
-    regret.click(fn=log_removal_request, inputs=[conversation_id], outputs=[query, chatbot, conversation_id])
+    if enable_logging_prompts:
+        regret.click(fn=log_removal_request, inputs=[conversation_id], outputs=[query, chatbot, conversation_id])
 
 if __name__ == "__main__":
     print("Launching Demo\n")
