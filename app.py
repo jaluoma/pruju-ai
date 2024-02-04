@@ -10,16 +10,22 @@ from brand_theming import customtheme
 
 import uuid
 
-def call_chat(query, chat_history, prompt_logging_enabled, conversation_id):
+def call_chat(query, chat_history, prompt_logging_enabled, conversation_id, request: gr.Request):
     if len(chat_history) == 0:
         conversation_id = str(uuid.uuid4()) if os.getenv("ENABLE_CONVERSATION_ID") is not None else "N/A"
     
+    # Try to read admin token
+    try:
+        admin_token = request.query_params['admin_token']
+    except:
+        admin_token = None
     # unpack history
+    print(admin_token)
     chat_history_unpacked = []
     for x in chat_history:
         for y in x:
             chat_history_unpacked.append(y)
-    chat_engine, answer = query_gpt_chat(query,chat_history_unpacked, prompt_logging_enabled, conversation_id)
+    chat_engine, answer = query_gpt_chat(query,chat_history_unpacked, prompt_logging_enabled, conversation_id, admin_token)
     chat_history.append((query, answer))
     return "", chat_history, conversation_id
 

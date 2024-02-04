@@ -165,7 +165,7 @@ print("System instruction template:\n" + system_instruction_template)
 
 # Main chat caller function
 
-def query_gpt_chat(query: str, history, prompt_logging_enabled: bool, conversation_id: str):
+def query_gpt_chat(query: str, history, prompt_logging_enabled: bool, conversation_id: str, admin_token: str = None):
     max_tokens=int(os.getenv("MAX_PROMPT_TOKENS"))
     # Check quota status and update model accordingly
     daily_calls_sum = check_quota_status()
@@ -221,7 +221,11 @@ def query_gpt_chat(query: str, history, prompt_logging_enabled: bool, conversati
             logged_prompt = ";".join([text1,text2])
         else:
             logged_prompt = "DISABLED"
-        query_statistics = default_model+","+conversation_id+","+logged_prompt+","+",".join(str(i) for i in query_statistics)+ " " + str(daily_calls_sum+1) 
+        if admin_token is not None and os.getenv("ADMIN_TOKEN") is not None and admin_token == os.getenv("ADMIN_TOKEN"):
+            model_string = default_model + "-" + admin_token
+        else:
+            model_string = default_model
+        query_statistics = model_string+","+conversation_id+","+logged_prompt+","+",".join(str(i) for i in query_statistics)+ " " + str(daily_calls_sum+1) 
         logger.info(query_statistics)
         
         
