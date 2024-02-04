@@ -1,10 +1,13 @@
 .venv
 __pycache__/
 .env
+.env.*
 .env.bak
 .DS_Store
 *.log
 .moodle
+.moodle.*
 moodle_data
 moodle_data_vdb
 prujuai_moodle
+prujuai_dir_secret_*

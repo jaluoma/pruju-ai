@@ -3,7 +3,7 @@ import requests
 import pandas as pd
 from urllib.request import urlretrieve
 from dotenv import load_dotenv
-load_dotenv(".moodle")
+import argparse
 
 def ws_fn_call(endpoint=os.getenv("WS_ENDPOINT"), courseid=os.getenv("COURSE_ID"), token=os.getenv("WS_TOKEN"), fn="core_course_get_contents"):
     """Run a Moodle Webservice API call.
@@ -140,10 +140,15 @@ def ws_files_todisk(df: pd.DataFrame, save_location=os.getenv("WS_STORAGE")):
     return True
 
 if __name__=="__main__":
-    resp=ws_fn_call()
-    df=ws_create_file_list(resp)
-    ws_files_todisk(df)
-    posts=ws_return_announcements()
+    parser=argparse.ArgumentParser(description="Ingest a Moodle course into a vector store.")
+    parser.add_argument('-f','--file',help="Dot file that contains the configuration",required=False, default=".moodle")
+    dotfile = parser.parse_args().file
+    print("Dot file: " + dotfile)
+    load_dotenv(dotfile)
+    resp=ws_fn_call(endpoint=os.getenv("WS_ENDPOINT"), courseid=os.getenv("COURSE_ID"), token=os.getenv("WS_TOKEN"), fn="core_course_get_contents")
+    df=ws_create_file_list(resp, token=os.getenv("WS_TOKEN"))
+    ws_files_todisk(df, save_location=os.getenv("WS_STORAGE"))
+    posts=ws_return_announcements(endpoint=os.getenv("WS_ENDPOINT"), courseid=os.getenv("COURSE_ID"), token=os.getenv("WS_TOKEN"))
 
     filenames = []
     for file in df['Filename']:
