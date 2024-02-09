@@ -37,8 +37,12 @@ def convert_files_totext(filenames):
         filetype = filename.split('.')[-1]
         print("Converting to text: " + filename)
         if filetype != "md":
-            text = textract.process(filename)
-            text = text.decode("utf-8")
+            try:
+                text = textract.process(filename)
+                text = text.decode("utf-8")          
+            except Exception as e:
+                print(f"An error occurred when processing the file {filename}: {e}. Unsupported file type?")
+                continue
         else:
             with open(filename) as f:
                 text=f.read()
