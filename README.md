@@ -143,7 +143,7 @@ If you're importing your course materials from Moodle using `moodle.py`, add the
 
 # Note on project documentation
 
-There are some new features in the app that are not yet properly documented. These include:
+There are some new features in the app that are not yet properly documented. Pre-existing functionalities are unaffected. These include:
 
 - Prompt logging 
 - AI response liking and disliking
