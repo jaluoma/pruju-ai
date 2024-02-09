@@ -159,6 +159,14 @@ else:
     print("Vector store not identified. Exiting.")
     exit(1)
 
+# Admin token check
+def check_admin_token(admin_token):    
+    if admin_token is not None and os.getenv("ADMIN_TOKEN") is not None and admin_token == os.getenv("ADMIN_TOKEN"):
+        model_string = default_model + "-" + admin_token
+    else:
+        model_string = default_model
+    return model_string
+
 instruction_file = open(str(os.getenv("CHAT_DATA_FOLDER"))+"/prompt_template.txt",'r')
 system_instruction_template = instruction_file.read()
 print("System instruction template:\n" + system_instruction_template)
@@ -218,13 +226,11 @@ def query_gpt_chat(query: str, history, prompt_logging_enabled: bool, conversati
         if prompt_logging_enabled == True:
             text1 = query.replace("\n", "\\n")
             text2 = results_content.replace("\n", "\\n")
-            logged_prompt = ";".join([text1,text2])
+            logged_prompt = f"<{conversation_id}>".join([text1,text2])
         else:
             logged_prompt = "DISABLED"
-        if admin_token is not None and os.getenv("ADMIN_TOKEN") is not None and admin_token == os.getenv("ADMIN_TOKEN"):
-            model_string = default_model + "-" + admin_token
-        else:
-            model_string = default_model
+        model_string=check_admin_token(admin_token)
+        #print(model_string)
         query_statistics = model_string+","+conversation_id+","+logged_prompt+","+",".join(str(i) for i in query_statistics)+ " " + str(daily_calls_sum+1) 
         logger.info(query_statistics)
         
@@ -235,11 +241,24 @@ def query_gpt_chat(query: str, history, prompt_logging_enabled: bool, conversati
 
     return current_model, results_content
 
-def write_log_removal_request(conversation_id):
+def write_log_removal_request(conversation_id, admin_token):
     daily_calls_sum = check_quota_status()
-    logger.info(default_model+
+    model_string=check_admin_token(admin_token)
+    logger.info(model_string+
                 ","+conversation_id+
-                ","+"PROMPT REMOVAL REQUEST"+
+                ","+"PROMPT REMOVAL REQUEST"+f"<{conversation_id}>"+
                 ","+
                 ",".join(str(i) for i in [0, 0, 0, 0])+ " " + str(daily_calls_sum))
-    return "Your request has been logged. You can safely close this window or continue chatting. Please remember to untick the prompt logging checkbox if you do not want us to save your prompts."
+    return True
+
+def log_vote(liked, value,conversation_id, prompt_logging_enabled, admin_token):
+    daily_calls_sum = check_quota_status()
+    vote_type = "UPVOTE" if liked else "DOWNVOTE"
+    output=str(value) if prompt_logging_enabled else "DISABLED"
+    model_string=check_admin_token(admin_token)
+    logger.info(model_string +
+                ","+ conversation_id +
+                ","+ vote_type +
+                f"<{conversation_id}>" + output + "," +
+                ",".join(str(i) for i in [0, 0, 0, 0])+ " " + str(daily_calls_sum))
+    return True
