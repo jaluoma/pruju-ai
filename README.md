@@ -141,6 +141,14 @@ VECTOR_STORE_API_KEY="your-secret" # If you use qdrant's hosted service
 
 If you're importing your course materials from Moodle using `moodle.py`, add the above lines to your `.moodle` too. You can consider running the Moodle import script periodically to keep the chatbot's knowledge base up-to-date. Again, _please be mindful of premissions on the Moodle end_.
 
+# Note on project documentation
+
+There are several some features in the app that are not yet properly documented. These include:
+
+- Prompt logging 
+- AI response liking and disliking
+- Miscellaneous configuration options
+
 # Project status
 
 The project is currently in a working demo state, with loads of room for improvement. Some possible directions for further development: 
