@@ -20,7 +20,7 @@ def call_chat(query, chat_history, prompt_logging_enabled, conversation_id, requ
     except:
         admin_token = None
     # unpack history
-    print(admin_token)
+    # print(admin_token)
     chat_history_unpacked = []
     for x in chat_history:
         for y in x:
@@ -82,7 +82,7 @@ if __name__ == "__main__":
     isDocker = os.path.exists("/.dockerenv")
     print(f"Docker: {isDocker}\n")
     
-    demo.queue(concurrency_count=int(os.getenv("MAX_CONCURRENCY")),
+    demo.queue(#concurrency_count=int(os.getenv("MAX_CONCURRENCY")),
                max_size=int(os.getenv("MAX_QUEUE")))
     demo.launch(server_name="0.0.0.0" if isDocker else "127.0.0.1", 
                 root_path=os.getenv("ROOT_PATH"),show_api=False,
