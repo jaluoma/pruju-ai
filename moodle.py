@@ -111,7 +111,6 @@ def ws_create_file_list(response: requests.Response, token=os.getenv("WS_TOKEN")
                 for content in module.get('contents', []):
                     item_name = module_name+"->"+content.get('filename','')
                     file_data.loc[len(file_data)] = [item_name,module_url,content.get('fileurl', '')+"&token="+token, content.get('timemodified', '')]
-
     return file_data
 
 
@@ -156,6 +155,15 @@ if __name__=="__main__":
     else:
         posts=None
 
+    # Remove unsupported file types
+    from textract.parsers import _get_available_extensions as get_available_extensions
+    supported_types = get_available_extensions()
+    df = df[df['Filename'].str.split('.').str[-1].isin(supported_types)]
+    # Ignore files that are listed in IGNORE_SUFFIXES environment variable
+    ignore_suffixes = os.getenv("IGNORE_SUFFIXES").split(',')
+    df = df[~df['Filename'].str.split('.').str[-1].isin(ignore_suffixes)]
+    df = df.reset_index(drop=True)    
+
     filenames = []
     for file in df['Filename']:
         file = os.getenv("WS_STORAGE")+"/"+file
@@ -170,7 +178,6 @@ if __name__=="__main__":
     chunk_df = create_chunck_dataframe(material_headings, texts)
     chunk_df['Modified'] = df['Modified']
     
-    # print(posts)
     if posts is not None:
         post_headings = "Announcements->" + posts['Subject'] + ", " + posts['URL']
         post_chunk_df = create_chunck_dataframe(post_headings,posts['Message'])
