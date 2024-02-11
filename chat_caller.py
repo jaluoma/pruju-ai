@@ -255,6 +255,7 @@ def log_vote(liked, value,conversation_id, prompt_logging_enabled, admin_token):
     daily_calls_sum = check_quota_status()
     vote_type = "UPVOTE" if liked else "DOWNVOTE"
     output=str(value) if prompt_logging_enabled else "DISABLED"
+    output = output.replace("\n", "\\n")
     model_string=check_admin_token(admin_token)
     logger.info(model_string +
                 ","+ conversation_id +
