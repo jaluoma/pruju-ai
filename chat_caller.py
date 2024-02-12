@@ -138,7 +138,10 @@ def provide_context_for_question(query, smart_search=False):
             [SystemMessage(content=system),
              HumanMessage(content=query)]
         ).content
-    docs = vector_store.similarity_search(query)
+    if os.getenv("DOCS_N") is not None:
+        docs = vector_store.similarity_search(query, k = int(os.getenv("DOCS_N")))
+    else:
+        docs = vector_store.similarity_search(query)
     context = "\n---\n".join(doc.page_content for doc in docs)
     return context
 
