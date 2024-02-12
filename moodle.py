@@ -160,8 +160,8 @@ if __name__=="__main__":
     supported_types = get_available_extensions()
     df = df[df['Filename'].str.split('.').str[-1].isin(supported_types)]
     # Ignore files that are listed in IGNORE_SUFFIXES environment variable
-    ignore_suffixes = os.getenv("IGNORE_SUFFIXES").split(',')
-    if ignore_suffixes is not None:
+    if os.getenv("IGNORE_SUFFIXES") is not None:
+        ignore_suffixes = os.getenv("IGNORE_SUFFIXES").split(',')
         df = df[~df['Filename'].str.split('.').str[-1].isin(ignore_suffixes)]
     df = df.reset_index(drop=True)    
 
