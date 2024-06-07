@@ -5,6 +5,7 @@ gradio
 langchain==0.2.3
 langchain-community==0.2.4
 langchain-openai==0.1.8
+langchain-qdrant==0.1.0
 tiktoken==0.7.0
 faiss-cpu==1.7.4
 torch==2.0.1
