@@ -100,7 +100,7 @@ def create_vector_store(df,
     if store_type=="faiss":
         vector_store = FAISS.from_texts(texts=master_chunk, embedding=embeddings,metadatas=master_metadata if metadatas else None)
     elif store_type=="qdrant":
-        from langchain.vectorstores import Qdrant
+        from langchain_community.vectorstores import Qdrant
         vector_store = Qdrant.from_texts(
             texts=master_chunk,
             embedding=embeddings,
