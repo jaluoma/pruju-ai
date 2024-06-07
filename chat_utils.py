@@ -20,8 +20,11 @@ def read_course_assets():
 # Define functions for memory management
 
 def purge_memory(messages, model_name, max_tokens: int):
-
     token_count = token_counter(messages, model_name)
+    # Handle case where system message token count exceeds max_tokens
+    system_token_count = token_counter([messages[0]], model_name)
+    if (system_token_count>max_tokens):
+        max_tokens = system_token_count+max_tokens
     if (len(messages)>1):
         while (token_count>max_tokens):
             # Print purged message for testing purposes

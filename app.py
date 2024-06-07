@@ -76,6 +76,8 @@ with gr.Blocks(theme=customtheme,
     enable_logging_prompts = os.getenv("ENABLE_LOGGING_PROMPTS")
     if enable_logging_prompts is not None:
         enable_logging_prompts = True if int(os.getenv("ENABLE_LOGGING_PROMPTS"))==1 else False
+    else:
+        enable_logging_prompts = False
     prompt_logging_enabled=gr.Checkbox(value=False,
                                         label="Allow prompt logging",
                                         visible=enable_logging_prompts,

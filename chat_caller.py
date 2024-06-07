@@ -3,10 +3,11 @@ from datetime import datetime
 
 import os
 from langchain.schema import AIMessage, SystemMessage, HumanMessage
-from langchain.embeddings import HuggingFaceInstructEmbeddings
-from langchain.chat_models import ChatOpenAI
-from langchain.chat_models import ChatOllama
-from langchain.callbacks import get_openai_callback
+from langchain_community.embeddings import HuggingFaceInstructEmbeddings
+#from langchain_community.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
+from langchain_community.chat_models import ChatOllama
+from langchain_community.callbacks.manager import get_openai_callback
 
 import httpx
 
@@ -15,6 +16,11 @@ load_dotenv()
 isDocker = os.path.exists("/.dockerenv")
 if isDocker:
     os.environ["CHAT_DATA_FOLDER"] = "/"+os.getenv("CHAT_DATA_FOLDER")
+
+if os.getenv("EMBEDDINGS_MODEL") is not None:
+    model_name=os.getenv("EMBEDDINGS_MODEL")
+else:
+    model_name="sentence-transformers/all-MiniLM-L6-v2"
 
 from chat_utils import purge_memory, token_counter
 
@@ -150,14 +156,14 @@ os.environ['TOKENIZERS_PARALLELISM'] = 'false' # Avoid warning: https://github.c
 print("Vector store: " + str(os.getenv("VECTOR_STORE")))
 if os.getenv("VECTOR_STORE") is None or os.getenv("VECTOR_STORE")=="faiss":
     print("Using local FAISS.")
-    from langchain.vectorstores import FAISS
-    vector_store = FAISS.load_local(os.getenv("CHAT_DATA_FOLDER")+"/faiss_index", HuggingFaceInstructEmbeddings(cache_folder=os.getenv("MODEL_CACHE"), model_name="sentence-transformers/all-MiniLM-L6-v2"))
+    from langchain_community.vectorstores import FAISS
+    vector_store = FAISS.load_local(os.getenv("CHAT_DATA_FOLDER")+"/faiss_index", HuggingFaceInstructEmbeddings(cache_folder=os.getenv("MODEL_CACHE"), model_name=model_name), allow_dangerous_deserialization=True)
 elif os.getenv("VECTOR_STORE")=="qdrant":
     from langchain.vectorstores import Qdrant
     from qdrant_client import QdrantClient
     client = QdrantClient(url=os.getenv("VECTOR_STORE_ENDPOINT"),api_key=os.getenv("VECTOR_STORE_API_KEY"))
     collection_name = os.getenv("VECTOR_STORE_COLLECTION")
-    vector_store = Qdrant(client, collection_name, HuggingFaceInstructEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2"))
+    vector_store = Qdrant(client, collection_name, HuggingFaceInstructEmbeddings(model_name=model_name))
 else:
     print("Vector store not identified. Exiting.")
     exit(1)
@@ -216,7 +222,7 @@ def query_gpt_chat(query: str, history, prompt_logging_enabled: bool, conversati
     # print(str(messages))
     # print(token_count)
     if llm_provider != 'null':
-        results = chat(messages)
+        results = chat.invoke(messages)
         result_tokens = token_counter([results],default_model)
         print(f"Prompt tokens: {token_count}")
         print(f"Completion tokens: {result_tokens}")

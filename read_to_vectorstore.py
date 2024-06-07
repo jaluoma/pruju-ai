@@ -1,10 +1,22 @@
 import argparse
-import os
 import textract
 import pandas as pd
 import os 
 from langchain.embeddings import HuggingFaceInstructEmbeddings
-from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
+
+from dotenv import load_dotenv 
+load_dotenv()
+
+if os.getenv("EMBEDDINGS_MODEL") is not None:
+    model_name=os.getenv("EMBEDDINGS_MODEL")
+else:
+    model_name="sentence-transformers/all-MiniLM-L6-v2"
+
+if os.getenv("CHUNK_SEPARATOR") is not None:
+    chunk_separator=os.getenv("CHUNK_SEPARATOR")
+else:
+    chunk_separator="\n\n"
 
 def read_filenames_from_directory(material_directory: str):
     filenames = []
@@ -58,7 +70,7 @@ def create_chunck_dataframe(material_headings, texts):
     # Create chunks
     from langchain.text_splitter import CharacterTextSplitter
     text_splitter = CharacterTextSplitter(        
-        separator = "\n\n",
+        separator = chunk_separator, # Set in .env, if not set, default is "\n\n"
         chunk_size = 500,
         chunk_overlap  = 100,
         length_function = len,
@@ -67,6 +79,7 @@ def create_chunck_dataframe(material_headings, texts):
     df['Text_Splitted'] = df['Text'].apply(text_splitter.split_text)
     # Append Heading to the top of chunk
     df['Text_Splitted_w_Headings'] = df.apply(lambda row: ["Source: " + row['Heading'] + '\n' + chunk for chunk in row['Text_Splitted']], axis=1)
+    print("Number of chunks in the first file: "+str(len(df['Text_Splitted'][0])))
     return df
 
 def create_vector_store(df,
@@ -83,7 +96,7 @@ def create_vector_store(df,
             for text_in_row in row['Text_Splitted_w_Headings']:
                 master_metadata.append(row[['Heading','Modified']].to_dict())
     # Create vector store
-    embeddings = HuggingFaceInstructEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    embeddings = HuggingFaceInstructEmbeddings(model_name=model_name)
     if store_type=="faiss":
         vector_store = FAISS.from_texts(texts=master_chunk, embedding=embeddings,metadatas=master_metadata if metadatas else None)
     elif store_type=="qdrant":
@@ -190,7 +203,7 @@ def main():
     # Load the vector store for testing
     print("Test querying the vector store (loaded from disk).")
     try:
-        loaded_vector_store = FAISS.load_local(folder, HuggingFaceInstructEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2"))
+        loaded_vector_store = FAISS.load_local(folder, HuggingFaceInstructEmbeddings(model_name=model_name), allow_dangerous_deserialization=True)
         # Try querying the vector store
 
         if use_defaults:
