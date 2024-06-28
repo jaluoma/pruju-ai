@@ -1,7 +1,5 @@
 python-dotenv==1.0.0
 gradio==4.36.0
-gradio
-#langchain==0.0.334
 langchain==0.2.3
 langchain-community==0.2.4
 langchain-openai==0.1.8
