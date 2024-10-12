@@ -2,7 +2,7 @@ import argparse
 import textract
 import pandas as pd
 import os 
-from langchain.embeddings import HuggingFaceInstructEmbeddings
+from langchain_community.embeddings import HuggingFaceInstructEmbeddings
 from langchain_community.vectorstores import FAISS
 
 from dotenv import load_dotenv 

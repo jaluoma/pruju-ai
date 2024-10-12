@@ -62,7 +62,9 @@ with gr.Blocks(theme=customtheme,
     chatbot = gr.Chatbot(label="Model: " + choose_model(check_quota_status()),
                          scale=10,show_label=True,
                          bubble_full_width=False,
-                         show_copy_button=True)  
+                         show_copy_button=True,
+                         # TODO: Change to "messages", tuples is depracated and will be removed by upstream in the future.
+                         type="tuples") 
     
     with gr.Group():
         with gr.Row():

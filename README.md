@@ -1,5 +1,7 @@
 # Introduction
 
+> ⚠️ Note: Active development of this project is on hold for the time being, due to time constraints. In the meanwhile, feel free to fork the repository or [reach out](https://www.aalto.fi/fi/ihmiset/jukka-luoma) if you'd like to maintain the project.
+
 Pruju AI is a teaching assistant that allows students to interact with the teacher's course materials. The assistant is designed to answer any student question, but _only if_ the answer can be found in the course materials provided by the teacher (e.g., syllabus, slides, lecture transcripts). The assistant can also be guided to answer in ways that align with the course’s pedagogical objectives. For example, the assistant can be told to _not_ answer certain questions or to answer in a particular way.
 
 The project exists to make creating virtual teaching assistants as easy as possible. From a pedagogical point of view, it is essential to be able to control the knowledge base of the assistant as well as the types of answers that the assistant provides to the student's questions.
@@ -18,6 +20,18 @@ Clone the repo and create a virtual environment for the project. Install require
 
 ```bash
 pip install -r requirements.txt
+```
+⚠️ Note: There are known dependency issues ([#554](https://github.com/deanmalmgren/textract/issues/533) and [#465](https://github.com/deanmalmgren/textract/issues/465)) associated with `textract`. The following steps should help you to avoid any problems.
+ 
+1. Specify the pip version to <= 24.0 before installing the depencies: 
+
+```bash
+pip install --upgrade pip==24.0
+```
+
+2. Upgrade `six` after installing the requirements: 
+```bash
+pip install --upgrade six
 ```
 
 ## Create and edit .env
