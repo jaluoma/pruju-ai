@@ -159,11 +159,11 @@ if os.getenv("VECTOR_STORE") is None or os.getenv("VECTOR_STORE")=="faiss":
     from langchain_community.vectorstores import FAISS
     vector_store = FAISS.load_local(os.getenv("CHAT_DATA_FOLDER")+"/faiss_index", HuggingFaceInstructEmbeddings(cache_folder=os.getenv("MODEL_CACHE"), model_name=model_name), allow_dangerous_deserialization=True)
 elif os.getenv("VECTOR_STORE")=="qdrant":
-    from langchain_qdrant import Qdrant
+    from langchain_qdrant import QdrantVectorStore
     from qdrant_client import QdrantClient
     client = QdrantClient(url=os.getenv("VECTOR_STORE_ENDPOINT"),api_key=os.getenv("VECTOR_STORE_API_KEY"))
     collection_name = os.getenv("VECTOR_STORE_COLLECTION")
-    vector_store = Qdrant(client, collection_name, HuggingFaceInstructEmbeddings(model_name=model_name))
+    vector_store = QdrantVectorStore(client, collection_name, HuggingFaceInstructEmbeddings(model_name=model_name))
 else:
     print("Vector store not identified. Exiting.")
     exit(1)
