@@ -134,7 +134,7 @@ WS_TOKEN="your-token"
 WS_ENDPOINT="https://your-moodle-instance.edu/webservice/rest/server.php"
 WS_STORAGE="moodle_data"
 ```
-Running the `moodle.py` script will download files (from _File_ and _Folder_ resources) from your course, as well as posts from the _Announcements_ forum. The script will by default embed the contents in a FAISS vector store in a directory specified in the `WS_STORAGE` environment variable, followed by "`_vdb`" (e.g., `moode_data_vdb`).
+Running the `moodle.py` script will download files (from _File_ and _Folder_ resources). Posts from the _Announcements_ forum can be included with the `-p` flag. The script will by default embed the contents in a FAISS vector store in a directory specified in the `WS_STORAGE` environment variable, followed by "`_vdb`" (e.g., `moode_data_vdb`).
 
 ```bash
 python3 moodle.py
