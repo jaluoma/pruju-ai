@@ -153,7 +153,7 @@ VECTOR_STORE_ENDPOINT="localhost" #"localhost" or hosted service endpoint
 VECTOR_STORE_API_KEY="your-secret" # If you use qdrant's hosted service
 ```
 
-If you're importing your course materials from Moodle using `moodle.py`, add the above lines to your `.moodle` too. You can consider running the Moodle import script periodically to keep the chatbot's knowledge base up-to-date. Again, _please be mindful of premissions on the Moodle end_.
+If you're importing your course materials from Moodle using `moodle.py`, add the above lines to your `.moodle` too. You can consider running the Moodle import script periodically to keep the chatbot's knowledge base up-to-date. Again, _please be mindful of permissions on the Moodle end_.
 
 # Note on project documentation
 
