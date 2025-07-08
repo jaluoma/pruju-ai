@@ -1,6 +1,6 @@
 # Introduction
 
-> ⚠️ Note: Active development of this project is on hold for the time being, due to time constraints. In the meanwhile, feel free to fork the repository or [reach out](https://www.aalto.fi/en/people/jukka-luoma) if you'd like to maintain the project.
+> ⚠️ Note: I now longer actively maintain the project, due to time constraints.
 
 Pruju AI is a teaching assistant that allows students to interact with the teacher's course materials. The assistant is designed to answer any student question, but _only if_ the answer can be found in the course materials provided by the teacher (e.g., syllabus, slides, lecture transcripts). The assistant can also be guided to answer in ways that align with the course’s pedagogical objectives. For example, the assistant can be told to _not_ answer certain questions or to answer in a particular way.
 
